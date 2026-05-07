@@ -33,6 +33,8 @@ export type DecisionPoint = {
   text: string;
 };
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
 export const siteConfig = {
   name: "Qin Tjokrosurjo, PhD",
   shortName: "Qin Tjokrosurjo",
@@ -40,7 +42,7 @@ export const siteConfig = {
   email: "qinyu5155@gmail.com",
   calendlyUrl: "", // TODO: Optional. Add later if you want, but the site keeps email primary.
   headshot: {
-    src: "/qin-headshot.jpg",
+    src: `${basePath}/qin-headshot.jpg`,
     alt: "Qin Tjokrosurjo, PhD",
     initials: "QT",
   },

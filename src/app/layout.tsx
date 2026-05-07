@@ -4,6 +4,8 @@ import { Inter, Newsreader } from "next/font/google";
 import "@/app/globals.css";
 import { siteConfig } from "@/config/site";
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
@@ -20,7 +22,7 @@ export const metadata: Metadata = {
   title: siteConfig.seo.title,
   description: siteConfig.seo.description,
   icons: {
-    icon: "/favicon.svg",
+    icon: `${basePath}/favicon.svg`,
   },
   openGraph: {
     title: siteConfig.seo.ogTitle,
