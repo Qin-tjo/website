@@ -60,11 +60,11 @@ export const siteConfig = {
   },
   hero: {
     eyebrow: "Independent scientific consulting for targeted oncology teams",
-    headline: "Biomarker and expansion decisions for targeted oncology programs.",
+    headline: "Biomarker strategy and translational decision support for oncology programs.",
     subheadline:
-      "I help early oncology teams pressure-test where to expand, whether biomarker evidence is fit for the decision, and how to interpret early response or resistance signals.",
+      "I help oncology teams evaluate where to expand, whether biomarker evidence is strong enough for the decision, and how to interpret early response or resistance signals.",
     credibility:
-      "Experience across target selection, platform target characterization, patient stratification, clinical biomarker strategy, and response/resistance analyses in targeted oncology programs.",
+      "Experience across target selection, platform target characterization, patient stratification, clinical biomarker strategy, and response/resistance analysis in targeted oncology programs.",
   },
   services: [
     {
@@ -282,13 +282,13 @@ export const siteConfig = {
     },
   ] satisfies Project[],
   about: {
-    heading: "Scientific judgment for moments when the next decision is not obvious.",
+    heading: "Turning complex oncology evidence into clear next-step decisions.",
     body:
-      "I am a trained cancer biologist with bench experience, functional-genomics depth, and a later pivot into translational data interpretation and clinical-stage oncology strategy.",
+      "I am a cancer biologist with deep experience in functional genomics, translational research, and clinical biomarker strategy.",
     credibility:
-      "At Harvard, I worked on CRISPR-based immunotherapy target screening and high-throughput functional genomics, connecting perturbation biology, immune mechanisms, and computational analysis. At Bicycle Therapeutics, my work spanned early target selection, platform target characterization, patient stratification, clinical biomarker strategy, and response/resistance interpretation across targeted oncology programs.",
+      "My work has connected early discovery biology with clinical-stage oncology decisions. At Harvard, I used CRISPR screening and high-throughput functional genomics to study immunotherapy targets and connect perturbation biology with immune mechanisms and computational analysis. At Bicycle Therapeutics, I worked across target selection, platform target characterization, patient stratification, clinical biomarker planning, and response/resistance interpretation for targeted oncology programs.",
     note:
-      "That mix is why I am useful when strong science still needs a clearer decision. I can move between wet-lab reality, public and internal datasets, clinical context, competitive pressure, and the practical question a team needs answered.",
+      "I help teams make sense of complex biology and turn it into clear, decision-ready outputs. I am especially useful when a project sits between wet-lab science, biomedical datasets, clinical context, and strategic questions. Teams work with me when they need rigorous scientific thinking, clear synthesis, and practical recommendations they can act on.",
   },
 };
 

@@ -11,8 +11,8 @@ export function Services() {
       <div className="mx-auto max-w-6xl">
         <SectionHeading
           eyebrow="Services"
-          title="Decision modules for targeted oncology programs."
-          description="Each project is scoped around the decision, the data available, and the readout the team needs."
+          title="Focused scientific support for targeted oncology decisions."
+          description="Each project is scoped around the question your team needs to answer, the evidence available, and the deliverable you need to move forward."
         />
         <div className="grid gap-5 lg:grid-cols-3">
           {siteConfig.services.map((service, index) => (

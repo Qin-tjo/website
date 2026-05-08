@@ -7,18 +7,18 @@ import { siteConfig } from "@/config/site";
 const credibilityItems = [
   {
     icon: Network,
-    label: "Cancer biology first",
-    text: "Trained in cancer biology, immunology, functional genomics, and hands-on experimental systems before moving into translational strategy.",
+    label: "Cancer biology depth",
+    text: "Deep training in cancer biology, immunology, and functional genomics, grounded in hands-on experimental work and oncology target discovery.",
   },
   {
     icon: Microscope,
-    label: "Wet lab to data science",
-    text: "Comfortable reading assays, samples, mechanisms, and messy datasets together, from IHC and immune profiling to RNA, DNA, and clinical response data.",
+    label: "Translational bridge",
+    text: "I connect wet-lab biology, molecular datasets, tissue and immune context, and clinical response signals to clarify what matters for a program.",
   },
   {
     icon: BarChart3,
     label: "Decision-ready judgment",
-    text: "I translate evidence into practical next steps: target ranking, patient stratification, expansion logic, response/resistance hypotheses, and competitive context.",
+    text: "I turn complex evidence into clear recommendations across target selection, biomarker strategy, patient stratification, response/resistance, and competitive positioning.",
   },
 ];
 
