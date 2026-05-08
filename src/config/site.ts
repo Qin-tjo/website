@@ -124,6 +124,18 @@ export const siteConfig = {
   },
   services: [
     {
+      title: "Target Selection",
+      outcome:
+        "Prioritize oncology targets using tumor and normal tissue expression, biology, internalization or modality fit, competitive context, and translational feasibility.",
+      bestFit:
+        "Discovery, platform, and early pipeline teams deciding which target or target class deserves deeper investment.",
+      deliverables: [
+        "Target shortlist with evidence grading",
+        "Tumor and normal tissue expression review",
+        "Modality-fit and translational risk memo",
+      ],
+    },
+    {
       title: "Indication Expansion Readout",
       outcome:
         "Rank tumor types or expansion cohorts using target biology, expression or imaging evidence, assay feasibility, clinical practicality, and competition.",

@@ -14,7 +14,7 @@ export function Services() {
           title="Focused scientific support for targeted oncology decisions."
           description="Each project is scoped around the question your team needs to answer, the evidence available, and the deliverable you need to move forward."
         />
-        <div className="grid gap-5 lg:grid-cols-3">
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
           {siteConfig.services.map((service, index) => (
             <FadeIn key={service.title} delay={index * 0.05}>
               <Card className="h-full p-6">
