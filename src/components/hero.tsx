@@ -1,4 +1,4 @@
-import { ArrowDown, Mail, SearchCheck } from "lucide-react";
+import { Mail } from "lucide-react";
 
 import { FadeIn } from "@/components/motion";
 import { Headshot } from "@/components/headshot";
@@ -30,22 +30,7 @@ export function Hero() {
                 {siteConfig.cta.primary}
               </a>
             </Button>
-            <Button asChild variant="outline" size="lg">
-              <a href="#work">
-                <ArrowDown className="h-4 w-4" />
-                {siteConfig.cta.secondary}
-              </a>
-            </Button>
           </div>
-          <div className="mt-8 grid gap-3">
-            {siteConfig.proofPoints.map((point) => (
-              <div key={point} className="flex items-center gap-3 rounded-xl border border-border/80 bg-background/72 px-4 py-3 text-sm text-muted-foreground shadow-soft">
-                <SearchCheck className="h-4 w-4 shrink-0 text-primary" />
-                <span>{point}</span>
-              </div>
-            ))}
-          </div>
-          <p className="mt-6 max-w-2xl text-sm leading-6 text-muted-foreground">{siteConfig.hero.trustLine}</p>
         </FadeIn>
         <FadeIn delay={0.12}>
           <Headshot />

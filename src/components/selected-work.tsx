@@ -27,7 +27,6 @@ export function SelectedWork() {
         <SectionHeading
           eyebrow="Proof of method"
           title="Decision artifacts, not generic summaries."
-          description="Public-data and synthetic examples showing the shape of a real readout: question, context, evidence, matrix, recommendation, caveat, and references."
         />
         <div className="grid gap-4 lg:grid-cols-4">
           {siteConfig.projects.map((project, index) => (
@@ -99,9 +98,6 @@ export function SelectedWork() {
             </div>
           </Card>
         </FadeIn>
-        <p className="mx-auto mt-8 max-w-3xl text-center text-sm leading-6 text-muted-foreground">
-          {siteConfig.disclaimer}
-        </p>
       </div>
     </section>
   );

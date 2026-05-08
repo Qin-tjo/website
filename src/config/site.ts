@@ -28,11 +28,6 @@ export type Service = {
   deliverables: string[];
 };
 
-export type DecisionPoint = {
-  title: string;
-  text: string;
-};
-
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 export const siteConfig = {
@@ -62,9 +57,6 @@ export const siteConfig = {
   },
   cta: {
     primary: "Start a project inquiry",
-    secondary: "View example work",
-    contactPrimary: "Email about a project",
-    emailIntro: "For project inquiries or collaborations, send a short note about the asset, target, dataset, or decision where you need an outside read.",
   },
   hero: {
     eyebrow: "Independent scientific consulting for targeted oncology teams",
@@ -73,35 +65,7 @@ export const siteConfig = {
       "I help early oncology teams pressure-test where to expand, whether biomarker evidence is fit for the decision, and how to interpret early response or resistance signals.",
     credibility:
       "Experience across target selection, platform target characterization, patient stratification, response/resistance analyses, and drug-conjugate / radioconjugate programs.",
-    trustLine: "Built for translational, clinical development, research, and strategy leaders who need decision-ready evidence before a cohort, assay, or readout locks.",
   },
-  proofPoints: [
-    "Which tumor types or cohorts should we prioritize next?",
-    "Is target expression, imaging uptake, or genotype definition strong enough?",
-    "What does early clinical or translational data actually support?",
-  ],
-  decisionPoints: [
-    {
-      title: "Cohort choice",
-      text: "A target looks promising, but the next tumor type, line of therapy, or biomarker-defined cohort is not obvious.",
-    },
-    {
-      title: "Assay and eligibility risk",
-      text: "The team needs to know whether assay, cutoff, sample, imaging, or eligibility assumptions are fit for purpose.",
-    },
-    {
-      title: "Early data interpretation",
-      text: "IHC, RNA, DNA, immune, response, or clinical data point in different directions.",
-    },
-    {
-      title: "Response and resistance",
-      text: "The program needs a practical plan for what to measure before expansion decisions lock.",
-    },
-    {
-      title: "Competitive context",
-      text: "The science is plausible, but differentiation, sequencing, or combination logic needs a sharper read.",
-    },
-  ] satisfies DecisionPoint[],
   services: [
     {
       title: "Indication Expansion Readout",
@@ -326,7 +290,6 @@ export const siteConfig = {
     note:
       "My publication background spans functional genomics, cancer immunity, microbiome/immunotherapy, and translational biology.",
   },
-  disclaimer: "Examples are public-data or synthetic deliverables intended to show method and judgment.",
 };
 
 export type SiteConfig = typeof siteConfig;
