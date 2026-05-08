@@ -25,6 +25,7 @@ const credibilityItems = [
 export function About() {
   return (
     <section id="about" className="border-y border-border/70 bg-muted/45 px-5 py-20 sm:px-6 lg:py-24">
+      <span id="contact" className="block scroll-mt-20" aria-hidden="true" />
       <div className="mx-auto max-w-6xl">
         <FadeIn delay={0.08}>
           <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
@@ -33,9 +34,22 @@ export function About() {
               <h2 className="font-serif text-3xl font-semibold text-foreground sm:text-4xl">{siteConfig.about.heading}</h2>
             </div>
             <div className="space-y-4 text-base leading-8 text-muted-foreground">
-              <p className="text-lg leading-8 text-foreground/82">{siteConfig.about.body}</p>
+              <p>{siteConfig.about.body}</p>
               <p>{siteConfig.about.credibility}</p>
               <p>{siteConfig.about.note}</p>
+              <div className="flex flex-wrap gap-x-5 gap-y-2 pt-2 text-sm font-semibold">
+                <a className="text-primary underline-offset-4 hover:underline" href={`mailto:${siteConfig.email}`}>
+                  Email
+                </a>
+                <a
+                  className="text-primary underline-offset-4 hover:underline"
+                  href={siteConfig.socials.linkedin}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  LinkedIn
+                </a>
+              </div>
             </div>
           </div>
           <div className="mt-10 grid gap-4 lg:grid-cols-3">

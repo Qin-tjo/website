@@ -64,7 +64,7 @@ export const siteConfig = {
     subheadline:
       "I help early oncology teams pressure-test where to expand, whether biomarker evidence is fit for the decision, and how to interpret early response or resistance signals.",
     credibility:
-      "Experience across target selection, platform target characterization, patient stratification, response/resistance analyses, and drug-conjugate / radioconjugate programs.",
+      "Experience across target selection, platform target characterization, patient stratification, clinical biomarker strategy, and response/resistance analyses in targeted oncology programs.",
   },
   services: [
     {
@@ -284,11 +284,11 @@ export const siteConfig = {
   about: {
     heading: "Scientific judgment for moments when the next decision is not obvious.",
     body:
-      "I bring the judgment of a trained cancer biologist who learned the biology at the bench, then moved into functional genomics, translational data, and clinical-stage oncology strategy.",
+      "I am a trained cancer biologist with bench experience, functional-genomics depth, and a later pivot into translational data interpretation and clinical-stage oncology strategy.",
     credibility:
       "At Harvard, I worked on CRISPR-based immunotherapy target screening and high-throughput functional genomics, connecting perturbation biology, immune mechanisms, and computational analysis. At Bicycle Therapeutics, my work spanned early target selection, platform target characterization, patient stratification, clinical biomarker strategy, and response/resistance interpretation across targeted oncology programs.",
     note:
-      "That mix is why I am useful when a team has strong science but needs an outside read on what the data actually support. I can move between wet-lab reality, public and internal datasets, clinical context, competitive pressure, and the practical decision a team needs to make.",
+      "That mix is why I am useful when strong science still needs a clearer decision. I can move between wet-lab reality, public and internal datasets, clinical context, competitive pressure, and the practical question a team needs answered.",
   },
 };
 
