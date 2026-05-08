@@ -7,18 +7,18 @@ import { siteConfig } from "@/config/site";
 const credibilityItems = [
   {
     icon: Network,
-    label: "Target biology",
-    text: "Target selection, platform characterization, expression evidence, tissue context, and clinical practicality.",
+    label: "Cancer biology first",
+    text: "Trained in cancer biology, immunology, functional genomics, and hands-on experimental systems before moving into translational strategy.",
   },
   {
     icon: Microscope,
-    label: "Data interpretation",
-    text: "IHC, transcriptomics, DNA sequencing, immune profiling, response data, resistance hypotheses, and sample caveats.",
+    label: "Wet lab to data science",
+    text: "Comfortable reading assays, samples, mechanisms, and messy datasets together, from IHC and immune profiling to RNA, DNA, and clinical response data.",
   },
   {
     icon: BarChart3,
-    label: "Decision support",
-    text: "Competitive landscape, combination opportunity, patient stratification, and slide-ready decision support.",
+    label: "Decision-ready judgment",
+    text: "I translate evidence into practical next steps: target ranking, patient stratification, expansion logic, response/resistance hypotheses, and competitive context.",
   },
 ];
 

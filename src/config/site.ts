@@ -284,11 +284,11 @@ export const siteConfig = {
   about: {
     heading: "Scientific judgment for moments when the next decision is not obvious.",
     body:
-      "I work best where target biology, assay evidence, clinical data, and competitive context need to be read together.",
+      "I bring the judgment of a trained cancer biologist who learned the biology at the bench, then moved into functional genomics, translational data, and clinical-stage oncology strategy.",
     credibility:
-      "At Bicycle Therapeutics, my work spanned early target selection, platform target characterization, patient stratification, clinical biomarker strategy, and response/resistance interpretation across targeted oncology programs. My work has included IHC, transcriptomics, DNA sequencing, immune profiling, clinical response data, competitive landscape, and combination opportunity analysis.",
+      "At Harvard, I worked on CRISPR-based immunotherapy target screening and high-throughput functional genomics, connecting perturbation biology, immune mechanisms, and computational analysis. At Bicycle Therapeutics, my work spanned early target selection, platform target characterization, patient stratification, clinical biomarker strategy, and response/resistance interpretation across targeted oncology programs.",
     note:
-      "My publication background spans functional genomics, cancer immunity, microbiome/immunotherapy, and translational biology.",
+      "That mix is why I am useful when a team has strong science but needs an outside read on what the data actually support. I can move between wet-lab reality, public and internal datasets, clinical context, competitive pressure, and the practical decision a team needs to make.",
   },
 };
 

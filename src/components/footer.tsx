@@ -10,10 +10,10 @@ export function Footer() {
         </div>
         <div className="flex flex-col gap-2 sm:items-end">
           <a className="font-medium text-primary underline-offset-4 hover:underline" href={`mailto:${siteConfig.email}`}>
-            {siteConfig.email}
+            Email
           </a>
           <a className="underline-offset-4 hover:text-foreground hover:underline" href={siteConfig.socials.linkedin} target="_blank" rel="noreferrer">
-            {siteConfig.socials.linkedin}
+            LinkedIn
           </a>
         </div>
       </div>
