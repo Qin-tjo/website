@@ -288,7 +288,7 @@ export const siteConfig = {
     credibility:
       "My work has connected early discovery biology with clinical-stage oncology decisions. At Harvard, I used CRISPR screening and high-throughput functional genomics to study immunotherapy targets and connect perturbation biology with immune mechanisms and computational analysis. At Bicycle Therapeutics, I worked across target selection, platform target characterization, patient stratification, clinical biomarker planning, and response/resistance interpretation for targeted oncology programs.",
     note:
-      "I help teams make sense of complex biology and turn it into clear, decision-ready outputs. I am especially useful when a project sits between wet-lab science, biomedical datasets, clinical context, and strategic questions. Teams work with me when they need rigorous scientific thinking, clear synthesis, and practical recommendations they can act on.",
+      "I help teams make sense of complex biology and turn it into clear, decision-ready outputs. Teams work with me when they need rigorous scientific thinking, clear synthesis, and practical recommendations they can act on.",
   },
 };
 
