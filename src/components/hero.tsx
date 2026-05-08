@@ -1,4 +1,4 @@
-import { Mail } from "lucide-react";
+import { Linkedin, Mail } from "lucide-react";
 
 import { FadeIn } from "@/components/motion";
 import { Headshot } from "@/components/headshot";
@@ -28,6 +28,11 @@ export function Hero() {
               <a href={`mailto:${siteConfig.email}`}>
                 <Mail className="h-4 w-4" />
                 {siteConfig.cta.primary}
+              </a>
+            </Button>
+            <Button asChild size="icon" variant="outline" aria-label="LinkedIn profile">
+              <a href={siteConfig.socials.linkedin} target="_blank" rel="noreferrer">
+                <Linkedin className="h-4 w-4" />
               </a>
             </Button>
           </div>

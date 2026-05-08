@@ -1,4 +1,4 @@
-export type WorkType = "Example deliverable" | "Sample work" | "Concept work" | "Mock work";
+export type WorkType = "Example artifact" | "Concept example" | "Sample artifact";
 
 export type Project = {
   title: string;
@@ -120,9 +120,9 @@ export const siteConfig = {
     {
       title: "HER2 Expansion Biomarker Sprint",
       category: "Indication expansion strategy",
-      workType: "Example deliverable",
+      workType: "Example artifact",
       description:
-        "A public-data example separating HER2 IHC 3+, low/ultralow, amplification, mutation, and heterogeneous expression before expansion decisions.",
+        "A public-data example showing how HER2 expression, amplification, mutation, heterogeneity, and assay practicality can shape expansion decisions.",
       question:
         "For a HER2-directed asset, which tumor segments deserve expansion investment beyond a broad HER2-positive basket?",
       context:
@@ -162,11 +162,11 @@ export const siteConfig = {
       ],
     },
     {
-      title: "CLDN6 Expansion Biomarker Readiness Memo",
+      title: "CLDN6 Expansion Readiness Memo",
       category: "Target-expression strategy",
-      workType: "Concept work",
+      workType: "Concept example",
       description:
-        "A public-data memo framing CLDN6 expansion as a prevalence, assay, heterogeneity, tissue-access, and trial-practicality question.",
+        "A public-data memo assessing CLDN6 expansion through prevalence, assay readiness, heterogeneity, tissue access, and trial practicality.",
       question:
         "Which CLDN6-positive tumor types are actionable once assay transferability, tissue logistics, and clinical feasibility are considered together?",
       context:
@@ -205,9 +205,9 @@ export const siteConfig = {
       ],
     },
     {
-      title: "Redacted Target-Ranking Matrix",
+      title: "Target-Ranking Matrix",
       category: "Target evaluation",
-      workType: "Mock work",
+      workType: "Sample artifact",
       description:
         "A synthetic matrix for ranking tumor types by target expression, normal tissue risk, assay feasibility, trial practicality, and whitespace.",
       question:
@@ -243,11 +243,11 @@ export const siteConfig = {
       ],
     },
     {
-      title: "Redacted Biomarker Data Review Memo",
+      title: "Biomarker Data Review Memo",
       category: "Clinical biomarker interpretation",
-      workType: "Mock work",
+      workType: "Sample artifact",
       description:
-        "A synthetic review memo for early clinical biomarker data in a targeted oncology conjugate program.",
+        "A synthetic review memo interpreting early clinical biomarker data in a targeted oncology program.",
       question:
         "What can early biomarker data say about response, resistance, and next analyses without overclaiming from small samples?",
       context:

@@ -11,10 +11,9 @@ import { cn } from "@/lib/utils";
 import { siteConfig } from "@/config/site";
 
 const labelTone: Record<string, string> = {
-  "Example deliverable": "border-primary/20 bg-primary/10 text-primary",
-  "Sample work": "border-slate-300 bg-slate-100 text-slate-700",
-  "Concept work": "border-blue-200 bg-blue-50 text-blue-800",
-  "Mock work": "border-muted-foreground/20 bg-muted text-muted-foreground",
+  "Example artifact": "border-primary/20 bg-primary/10 text-primary",
+  "Concept example": "border-blue-200 bg-blue-50 text-blue-800",
+  "Sample artifact": "border-slate-300 bg-slate-100 text-slate-700",
 };
 
 export function SelectedWork() {
@@ -25,8 +24,8 @@ export function SelectedWork() {
     <section id="work" className="px-5 py-20 sm:px-6 lg:py-24">
       <div className="mx-auto max-w-6xl">
         <SectionHeading
-          eyebrow="Proof of method"
-          title="Decision artifacts, not generic summaries."
+          eyebrow="Sample work"
+          title="Decision-ready artifacts, not generic summaries."
         />
         <div className="grid gap-4 lg:grid-cols-4">
           {siteConfig.projects.map((project, index) => (
@@ -58,7 +57,7 @@ export function SelectedWork() {
                       aria-expanded={selectedIndex === index}
                       onClick={() => setSelectedIndex(index)}
                     >
-                      {selectedIndex === index ? "Selected artifact" : "View artifact"}
+                      View artifact
                       <ArrowRight className="h-3.5 w-3.5" />
                     </button>
                   </div>

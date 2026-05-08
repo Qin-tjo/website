@@ -37,19 +37,6 @@ export function About() {
               <p>{siteConfig.about.body}</p>
               <p>{siteConfig.about.credibility}</p>
               <p>{siteConfig.about.note}</p>
-              <div className="flex flex-wrap gap-x-5 gap-y-2 pt-2 text-sm font-semibold">
-                <a className="text-primary underline-offset-4 hover:underline" href={`mailto:${siteConfig.email}`}>
-                  Email
-                </a>
-                <a
-                  className="text-primary underline-offset-4 hover:underline"
-                  href={siteConfig.socials.linkedin}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  LinkedIn
-                </a>
-              </div>
             </div>
           </div>
           <div className="mt-10 grid gap-4 lg:grid-cols-3">
