@@ -1,5 +1,60 @@
 export type WorkType = "Example artifact" | "Concept example" | "Sample artifact";
 
+export type ProjectVisual =
+  | {
+      kind: "her2-expansion";
+      title: string;
+      subtitle: string;
+      rows: {
+        tumor: string;
+        prevalence: number;
+        response: number | null;
+        screenBurden: string;
+        priority: "High" | "Medium" | "Low";
+      }[];
+    }
+  | {
+      kind: "cldn6-readiness";
+      title: string;
+      subtitle: string;
+      rows: {
+        tumor: string;
+        prevalence: string;
+        assay: number;
+        tissue: number;
+        trial: number;
+        confidence: "High" | "Medium" | "Low";
+      }[];
+    }
+  | {
+      kind: "target-ranking";
+      title: string;
+      subtitle: string;
+      criteria: { label: string; weight: number }[];
+      rows: {
+        candidate: string;
+        expression: number;
+        safety: number;
+        assay: number;
+        feasibility: number;
+        competition: number;
+        confidence: "High" | "Medium" | "Low";
+      }[];
+    }
+  | {
+      kind: "biomarker-review";
+      title: string;
+      subtitle: string;
+      patients: {
+        id: string;
+        change: number;
+        duration: number;
+        target: "High" | "Medium" | "Low";
+        status: "PR" | "SD" | "PD";
+        missing: string[];
+      }[];
+    };
+
 export type Project = {
   title: string;
   category: string;
@@ -15,6 +70,7 @@ export type Project = {
   interpretation: string[];
   recommendation: string;
   caveat: string;
+  visual: ProjectVisual;
   references: {
     label: string;
     href: string;
@@ -130,16 +186,16 @@ export const siteConfig = {
       evidence: [
         "FDA granted tumor-agnostic accelerated approval for T-DXd in HER2-positive IHC 3+ solid tumors in 2024.",
         "DESTINY-PanTumor02 IHC 3+ ORR varied by cohort: endometrial 84.6%, cervical 75.0%, ovarian 63.6%, bladder 56.3%, biliary tract 56.3%, pancreatic 0%.",
-        "A 65,075-sample real-world study reported pan-tumor IHC 3+ prevalence of 3.1%, with large tumor-type differences.",
+        "A 65,075-sample real-world study reported IHC 3+ prevalence ranging from 13.9% in bladder cancer and 13.6% in uterine serous carcinoma to 1.1% in pancreatic adenocarcinoma.",
       ],
       table: {
-        columns: ["Segment", "Priority", "Why"],
+        columns: ["Segment", "Priority", "Decision logic"],
         rows: [
-          ["Uterine serous / endometrial IHC 3+", "High", "Strong response signal; uterine serous has high IHC 3+ prevalence."],
-          ["Bladder / urothelial IHC 3+", "High", "High prevalence and response signal, but ADC sequencing matters."],
-          ["Cervical IHC 3+", "High", "Strong response signal; small n and screening assumptions need testing."],
-          ["Biliary tract IHC 3+", "Medium", "Validated HER2 biology but crowded after zanidatamab approval."],
-          ["Pancreatic IHC 3+", "Low", "Low prevalence and weak public response signal."],
+          ["Uterine serous / endometrial IHC 3+", "High", "High IHC 3+ prevalence in uterine serous disease plus strong endometrial response signal."],
+          ["Bladder / urothelial IHC 3+", "High", "High prevalence and response signal; sequencing and Nectin-4 ADC context matter."],
+          ["Cervical IHC 3+", "High", "Strong public response signal; small cohort and screening assumptions need pressure testing."],
+          ["Biliary tract IHC 3+", "Medium", "Validated HER2 biology but now a differentiation problem after zanidatamab approval."],
+          ["Pancreatic IHC 3+", "Low", "Low prevalence and weak public IHC 3+ response signal."],
         ],
       },
       interpretation: [
@@ -151,6 +207,19 @@ export const siteConfig = {
         "Prioritize IHC 3+ uterine serous/endometrial, bladder/urothelial, and cervical hypotheses first; treat biliary tract as a differentiation case and pancreatic as a low-priority public-data signal.",
       caveat:
         "The ranking would change with asset-specific potency, bystander effect, toxicity, internal IHC prevalence, tissue availability, and line-of-therapy assumptions.",
+      visual: {
+        kind: "her2-expansion",
+        title: "HER2 IHC 3+ signal versus screening burden",
+        subtitle: "Public-data view combining reported prevalence with IHC 3+ response signal where available.",
+        rows: [
+          { tumor: "Uterine serous", prevalence: 13.6, response: 84.6, screenBurden: "~7 screened per IHC 3+", priority: "High" },
+          { tumor: "Bladder", prevalence: 13.9, response: 56.3, screenBurden: "~7 screened per IHC 3+", priority: "High" },
+          { tumor: "Cervical", prevalence: 4.2, response: 75.0, screenBurden: "~24 screened per IHC 3+", priority: "High" },
+          { tumor: "Biliary tract", prevalence: 5.3, response: 56.3, screenBurden: "~19 screened per IHC 3+", priority: "Medium" },
+          { tumor: "Ovarian epithelial", prevalence: 2.9, response: 63.6, screenBurden: "~34 screened per IHC 3+", priority: "Medium" },
+          { tumor: "Pancreatic", prevalence: 1.1, response: 0, screenBurden: "~91 screened per IHC 3+", priority: "Low" },
+        ],
+      },
       references: [
         {
           label: "FDA T-DXd tumor-agnostic approval",
@@ -174,15 +243,15 @@ export const siteConfig = {
       evidence: [
         "TORL publicly describes TORL-1-23 / ixotatug vedotin development in CLDN6-positive platinum-resistant ovarian cancer and broader CLDN6-positive tumors.",
         "The CLDN6-23-ADC preclinical paper reported elevated CLDN6 in 29% of ovarian epithelial carcinomas, about 45% of high-grade serous ovarian carcinomas, and 11% of endometrial carcinomas.",
-        "CATALINA-2 requires CLDN6 tumor positivity by a reference laboratory assay before treatment.",
+        "CATALINA-2 requires CLDN6 tumor positivity by a reference laboratory assay and tumor tissue before treatment.",
       ],
       table: {
-        columns: ["Indication", "Priority", "Main risk", "Next evidence"],
+        columns: ["Indication", "Public signal", "Main risk", "Next evidence"],
         rows: [
-          ["Ovarian follow-ons", "High", "Cutoff, subtype, and resistance questions remain.", "Expression-response and progression-sample plan"],
-          ["Endometrial", "Medium-high", "Histology-specific prevalence and cutoff transfer need validation.", "IHC prevalence, membrane localization, archival/fresh concordance"],
-          ["Testicular / GCT", "Medium", "Small population and expansion feasibility.", "Screening model and post-standard-of-care patient flow"],
-          ["NSCLC", "Medium", "Low/heterogeneous expression and small-biopsy constraints.", "Tissue success rate and screen-failure burden"],
+          ["Ovarian follow-ons", "45% HGSOC / 29% ovarian epithelial elevated CLDN6", "Cutoff, subtype, and resistance questions remain.", "Expression-response and progression-sample plan"],
+          ["Endometrial", "11% elevated CLDN6 in preclinical IHC series", "Histology-specific cutoff transfer needs validation.", "Membrane localization, archival/fresh concordance"],
+          ["Testicular / GCT", "Publicly listed CLDN6-relevant tumor type", "Small population and expansion feasibility.", "Screening model and post-standard-of-care patient flow"],
+          ["NSCLC", "Publicly listed CLDN6-relevant tumor type", "Low/heterogeneous expression and small-biopsy constraints.", "Tissue success rate and screen-failure burden"],
         ],
       },
       interpretation: [
@@ -194,6 +263,17 @@ export const siteConfig = {
         "Use ovarian data as the assay and biology anchor, then rank endometrial, testicular/GCT, and NSCLC through a feasibility-weighted expansion matrix before opening broad CLDN6-positive cohorts.",
       caveat:
         "Public sources do not disclose the exact CLDN6 assay, scoring algorithm, positivity cutoff, or tissue workflow, so internal assay and sample data would be decision-changing.",
+      visual: {
+        kind: "cldn6-readiness",
+        title: "CLDN6 expansion readiness is not prevalence alone",
+        subtitle: "Qualitative readiness view: 1 = weak/public gap, 5 = strong public support.",
+        rows: [
+          { tumor: "Ovarian follow-ons", prevalence: "29-45% public IHC signal", assay: 4, tissue: 4, trial: 4, confidence: "High" },
+          { tumor: "Endometrial", prevalence: "11% public IHC signal", assay: 3, tissue: 4, trial: 3, confidence: "Medium" },
+          { tumor: "Testicular / GCT", prevalence: "Publicly relevant, prevalence gap", assay: 2, tissue: 3, trial: 2, confidence: "Low" },
+          { tumor: "NSCLC", prevalence: "Publicly relevant, prevalence gap", assay: 2, tissue: 2, trial: 4, confidence: "Low" },
+        ],
+      },
       references: [
         { label: "TORL Bio official site", href: "https://torlbio.com/" },
         {
@@ -222,8 +302,8 @@ export const siteConfig = {
       table: {
         columns: ["Rank", "Candidate", "Score", "Confidence", "Decision gate"],
         rows: [
-          ["1", "Tumor Type 1, biomarker-high subtype", "4.2", "Medium-high", "Open expansion if assay cutoff and tissue success are confirmed."],
-          ["2", "Tumor Type 2, resistant-line setting", "3.9", "Medium", "Advance after cutoff and normal tissue review."],
+          ["1", "Biomarker-high subtype", "4.2", "Medium-high", "Open expansion if assay cutoff and tissue success are confirmed."],
+          ["2", "Resistant-line setting", "3.9", "Medium", "Advance after cutoff and normal tissue review."],
           ["3", "Molecularly enriched subset", "3.8", "Medium", "Run focused prevalence and feasibility study."],
           ["4", "Broad unselected population", "3.2", "Low-medium", "Hold unless enriched subgroup emerges."],
           ["5", "Rare high-expression population", "3.1", "Medium", "Consider lifecycle or investigator-led path."],
@@ -238,8 +318,28 @@ export const siteConfig = {
         "Prioritize the top biomarker-high subtype only if source strength, assay feasibility, and tissue access clear a predefined decision gate.",
       caveat:
         "Weights should change by modality: radiopharmaceuticals need more imaging/dosimetry weight, while ADCs need more expression, localization, payload, and heterogeneity weight.",
+      visual: {
+        kind: "target-ranking",
+        title: "Weighted ranking makes assumptions visible",
+        subtitle: "Synthetic ADC-style scorecard. Higher is stronger; weights should change by modality.",
+        criteria: [
+          { label: "Target expression", weight: 30 },
+          { label: "Normal tissue safety", weight: 20 },
+          { label: "Assay readiness", weight: 20 },
+          { label: "Trial feasibility", weight: 15 },
+          { label: "Whitespace", weight: 15 },
+        ],
+        rows: [
+          { candidate: "Biomarker-high subtype", expression: 5, safety: 4, assay: 4, feasibility: 4, competition: 4, confidence: "High" },
+          { candidate: "Resistant-line setting", expression: 4, safety: 4, assay: 3, feasibility: 4, competition: 4, confidence: "Medium" },
+          { candidate: "Molecularly enriched subset", expression: 4, safety: 3, assay: 3, feasibility: 3, competition: 5, confidence: "Medium" },
+          { candidate: "Broad unselected population", expression: 3, safety: 3, assay: 4, feasibility: 5, competition: 2, confidence: "Low" },
+          { candidate: "Rare high-expression group", expression: 5, safety: 4, assay: 2, feasibility: 1, competition: 5, confidence: "Medium" },
+        ],
+      },
       references: [
-        { label: "Synthetic example based on public-data workflow", href: "#work" },
+        { label: "Synthetic sample based on public-data workflow", href: "#work" },
+        { label: "ADC resistance biomarker review", href: "https://pmc.ncbi.nlm.nih.gov/articles/PMC12077897/" },
       ],
     },
     {
@@ -276,8 +376,26 @@ export const siteConfig = {
         "Keep target expression as the selection anchor, but define response/resistance analyses before expansion so target-high non-response can be interpreted rather than hand-waved.",
       caveat:
         "Small samples, missing exposure data, archival tissue, and incomplete paired biopsies can change confidence more than the biomarker signal itself.",
+      visual: {
+        kind: "biomarker-review",
+        title: "Synthetic patient-level response readout",
+        subtitle: "Mock Phase 1-style view showing response, duration, target tier, and missingness.",
+        patients: [
+          { id: "P01", change: -72, duration: 9.8, target: "High", status: "PR", missing: [] },
+          { id: "P02", change: -48, duration: 7.4, target: "High", status: "PR", missing: ["RNA"] },
+          { id: "P03", change: -34, duration: 5.6, target: "Medium", status: "PR", missing: [] },
+          { id: "P04", change: -22, duration: 4.8, target: "High", status: "SD", missing: ["paired biopsy"] },
+          { id: "P05", change: -8, duration: 3.2, target: "Low", status: "SD", missing: [] },
+          { id: "P06", change: 4, duration: 2.6, target: "High", status: "SD", missing: ["ctDNA"] },
+          { id: "P07", change: 14, duration: 2.1, target: "Medium", status: "PD", missing: ["RNA", "paired biopsy"] },
+          { id: "P08", change: 28, duration: 1.7, target: "High", status: "PD", missing: [] },
+          { id: "P09", change: 42, duration: 1.4, target: "Low", status: "PD", missing: ["IHC repeat"] },
+        ],
+      },
       references: [
-        { label: "Synthetic example based on biomarker-review workflow", href: "#work" },
+        { label: "Synthetic sample based on biomarker-review workflow", href: "#work" },
+        { label: "Oncology response plot grammar", href: "https://pmc.ncbi.nlm.nih.gov/articles/PMC5017943/" },
+        { label: "REMARK reporting guidance", href: "https://pmc.ncbi.nlm.nih.gov/articles/PMC2361579/" },
       ],
     },
   ] satisfies Project[],
