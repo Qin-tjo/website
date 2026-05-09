@@ -140,7 +140,7 @@ function ArtifactVisual({ visual }: { visual: ProjectVisual }) {
       <div className="border-b border-border/70 bg-primary/[0.04] px-4 py-3">
         <p className="text-sm font-semibold text-foreground">{visual.title}</p>
         <p className="mt-1 text-xs leading-5 text-muted-foreground">{visual.subtitle}</p>
-        <TierLegend />
+        {visual.kind === "her2-expansion" ? <TierLegend context="her2" /> : <TierLegend />}
       </div>
       <div className="overflow-x-auto p-4">
         {visual.kind === "her2-expansion" ? <Her2ExpansionVisual visual={visual} /> : null}
@@ -158,9 +158,14 @@ function Her2ExpansionVisual({ visual }: { visual: Extract<ProjectVisual, { kind
 
   return (
     <div className="min-w-[760px] space-y-3">
+      <div className="grid gap-2 rounded-lg border border-border/70 bg-background p-3 text-[0.7rem] leading-5 text-muted-foreground sm:grid-cols-3">
+        <p><span className="font-semibold text-emerald-700">High:</span> near-term expansion hypothesis to pressure-test first.</p>
+        <p><span className="font-semibold text-amber-700">Medium:</span> plausible follow-on; needs differentiation or feasibility support.</p>
+        <p><span className="font-semibold text-rose-700">Low:</span> hold unless asset-specific internal data change the case.</p>
+      </div>
       <div className="grid grid-cols-[1.05fr_1fr_1fr_0.7fr] gap-3 text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-foreground/50">
         <span>Tumor</span>
-        <span>IHC 3+ prevalence</span>
+        <span>IHC 3+ prevalence (N)</span>
         <span>IHC 3+ ORR (N)</span>
         <span>Priority</span>
       </div>
@@ -182,7 +187,7 @@ function Her2ExpansionVisual({ visual }: { visual: Extract<ProjectVisual, { kind
         </div>
       ))}
       <ChartNote>
-        Ranking is a qualitative expansion screen: IHC 3+ response signal, cohort N, real-world IHC 3+ prevalence, approximate screening burden, tissue practicality, and competitive context are read together. ORR values are from small DESTINY-PanTumor02 IHC 3+ cohorts; prevalence values are from a separate real-world IHC dataset, so this is not a cross-trial efficacy comparison.
+        Takeaway: the best first questions are not simply the highest ORR rows. Priority reflects response signal, cohort N, prevalence denominator, approximate screening burden, tissue practicality, and competitive context. ORR values are from small DESTINY-PanTumor02 IHC 3+ cohorts; prevalence values are from a separate real-world IHC dataset.
       </ChartNote>
     </div>
   );
@@ -359,13 +364,18 @@ function ScoreDots({ value, tier }: { value: number; tier: Tier }) {
   );
 }
 
-function TierLegend() {
+function TierLegend({ context = "default" }: { context?: "default" | "her2" }) {
+  const labels = {
+    default: { High: "High", Medium: "Medium", Low: "Low" },
+    her2: { High: "High priority", Medium: "Medium priority", Low: "Low priority" },
+  }[context];
+
   return (
     <div className="mt-3 flex flex-wrap gap-2">
       {(["High", "Medium", "Low"] as Tier[]).map((tier) => (
         <span key={tier} className="inline-flex items-center gap-1.5 text-[0.68rem] font-medium text-muted-foreground">
           <span className={cn("h-2 w-2 rounded-full", tierTone[tier].bar)} />
-          {tier}
+          {labels[tier]}
         </span>
       ))}
     </div>
@@ -410,7 +420,7 @@ function ProjectTable({ columns, rows }: { columns: string[]; rows: string[][] }
   return (
     <div className="overflow-hidden rounded-xl border border-border/80 bg-background">
       <div className="overflow-x-auto">
-        <table className="min-w-[680px] text-left text-xs">
+        <table className="min-w-[960px] text-left text-xs">
           <thead className="bg-primary/[0.06] text-foreground">
             <tr>
               {columns.map((column) => (
@@ -425,7 +435,7 @@ function ProjectTable({ columns, rows }: { columns: string[]; rows: string[][] }
               <tr key={row.join("|")}>
                 {row.map((cell) => (
                   <td key={cell} className="max-w-[18rem] px-3 py-2.5 leading-5 text-muted-foreground align-top">
-                    {cell}
+                    {isTier(cell) ? <PriorityPill priority={cell} /> : cell}
                   </td>
                 ))}
               </tr>
@@ -435,6 +445,10 @@ function ProjectTable({ columns, rows }: { columns: string[]; rows: string[][] }
       </div>
     </div>
   );
+}
+
+function isTier(value: string): value is Tier {
+  return value === "High" || value === "Medium" || value === "Low";
 }
 
 function ReferenceList({ references }: { references: { label: string; href: string }[] }) {
