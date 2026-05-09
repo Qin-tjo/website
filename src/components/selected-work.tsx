@@ -155,40 +155,149 @@ function ArtifactVisual({ visual }: { visual: ProjectVisual }) {
 function Her2ExpansionVisual({ visual }: { visual: Extract<ProjectVisual, { kind: "her2-expansion" }> }) {
   const maxResponse = 90;
   const maxPrevalence = 15;
+  const responseRows = [...visual.rows].sort((a, b) => (b.response ?? -1) - (a.response ?? -1));
+  const prevalenceRows = [...visual.rows].sort((a, b) => b.prevalence - a.prevalence);
+  const priorityRows = [...visual.rows].sort((a, b) => a.finalRank - b.finalRank);
 
   return (
-    <div className="min-w-[760px] space-y-3">
+    <div className="min-w-[860px] space-y-5">
       <div className="grid gap-2 rounded-lg border border-border/70 bg-background p-3 text-[0.7rem] leading-5 text-muted-foreground sm:grid-cols-3">
         <p><span className="font-semibold text-emerald-700">High:</span> near-term expansion hypothesis to pressure-test first.</p>
         <p><span className="font-semibold text-amber-700">Medium:</span> plausible follow-on; needs differentiation or feasibility support.</p>
         <p><span className="font-semibold text-rose-700">Low:</span> hold unless asset-specific internal data change the case.</p>
       </div>
-      <div className="grid grid-cols-[1.05fr_1fr_1fr_0.7fr] gap-3 text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-foreground/50">
-        <span>Tumor</span>
-        <span>IHC 3+ prevalence (N)</span>
-        <span>IHC 3+ ORR (N)</span>
-        <span>Priority</span>
+
+      <div className="grid gap-4 lg:grid-cols-2">
+        <RankedBarPanel
+          title="1. Response signal rank"
+          message="Highest public ORR signals are endometrial, cervical, and ovarian, but N is small."
+          footnote="DESTINY-PanTumor02 centrally confirmed HER2 IHC 3+ cohorts; ORR shown with cohort N."
+        >
+          {responseRows.map((row) => (
+            <RankedBar
+              key={row.tumor}
+              label={row.tumor}
+              value={row.response ?? 0}
+              max={maxResponse}
+              valueLabel={row.response === null ? "n/a" : `${formatPercent(row.response)} ORR (n=${row.responseN})`}
+              tier={row.priority}
+              muted={row.response === null}
+            />
+          ))}
+        </RankedBarPanel>
+
+        <RankedBarPanel
+          title="2. Screening-yield rank"
+          message="Bladder and uterine serous have the highest public IHC 3+ prevalence; pancreatic has the weakest yield."
+          footnote="Real-world HER2 IHC dataset; prevalence shown with IHC 3+ count / tested N."
+        >
+          {prevalenceRows.map((row) => (
+            <RankedBar
+              key={row.tumor}
+              label={row.tumor}
+              value={row.prevalence}
+              max={maxPrevalence}
+              valueLabel={row.prevalenceLabel ?? `${row.prevalence}% (${row.prevalencePositive}/${row.prevalenceN})`}
+              tier={row.priority}
+            />
+          ))}
+        </RankedBarPanel>
       </div>
-      {visual.rows.map((row) => (
-        <div key={row.tumor} className="grid grid-cols-[1.05fr_1fr_1fr_0.7fr] items-center gap-3 text-xs">
-          <div>
-            <p className="font-medium text-foreground">{row.tumor}</p>
-            <p className="mt-0.5 text-[0.68rem] text-muted-foreground">{row.screenBurden}</p>
-          </div>
-          <MetricBar value={row.prevalence} max={maxPrevalence} label={row.prevalenceLabel ?? `${row.prevalence}%`} tier={row.priority} />
-          <MetricBar
-            value={row.response ?? 0}
-            max={maxResponse}
-            label={row.response === null ? "n/a" : `${row.response}%${row.responseN ? ` (n=${row.responseN})` : ""}`}
-            tier={row.priority}
-            muted={row.response === null}
-          />
-          <PriorityPill priority={row.priority} />
+
+      <div className="rounded-xl border border-border/80 bg-background">
+        <div className="border-b border-border/70 bg-muted/35 px-4 py-3">
+          <p className="text-sm font-semibold text-foreground">3. Evidence-backed prioritization matrix</p>
+          <p className="mt-1 text-xs leading-5 text-muted-foreground">
+            Final rank integrates response strength, prevalence/screening yield, and practical differentiation. Scores are 1-5 directional judgments from public data.
+          </p>
         </div>
-      ))}
+        <div className="grid grid-cols-[1.2fr_0.55fr_0.62fr_0.62fr_0.62fr_0.72fr_0.62fr_1.5fr] gap-2 p-4 text-xs">
+          {["Segment", "ORR", "Prevalence", "Screening", "Differentiation", "Overall", "Priority", "Logic"].map((header) => (
+            <p key={header} className="text-[0.62rem] font-semibold uppercase tracking-[0.11em] text-foreground/50">{header}</p>
+          ))}
+          {priorityRows.map((row) => (
+            <div key={row.tumor} className="contents">
+              <div className="border-t border-border/70 py-3">
+                <p className="font-semibold text-foreground">#{row.finalRank} {row.tumor}</p>
+                <p className="mt-1 text-[0.68rem] text-muted-foreground">{row.screenBurden}</p>
+              </div>
+              <HeatCell value={row.matrix.response} />
+              <HeatCell value={row.matrix.prevalence} />
+              <HeatCell value={row.matrix.screening} />
+              <HeatCell value={row.matrix.differentiation} />
+              <div className="border-t border-border/70 py-3">
+                <p className="font-semibold text-foreground">{row.finalScore.toFixed(1)}</p>
+              </div>
+              <div className="border-t border-border/70 py-3">
+                <PriorityPill priority={row.priority} />
+              </div>
+              <p className="border-t border-border/70 py-3 leading-5 text-muted-foreground">{row.rationale}</p>
+            </div>
+          ))}
+        </div>
+        <div className="border-t border-border/70 px-4 py-3">
+          <p className="text-[0.68rem] leading-5 text-muted-foreground">
+            Annotation: response score considers ORR and IHC 3+ cohort N; prevalence and screening scores use real-world IHC 3+ rate and approximate patients screened per positive; differentiation reflects public competitive and histology-specific context. Overall score is the average of the four displayed evidence dimensions.
+          </p>
+        </div>
+      </div>
+
       <ChartNote>
-        Takeaway: the best first questions are not simply the highest ORR rows. Priority reflects response signal, cohort N, prevalence denominator, approximate screening burden, tissue practicality, and competitive context. ORR values are from small DESTINY-PanTumor02 IHC 3+ cohorts; prevalence values are from a separate real-world IHC dataset.
+        Takeaway: prioritize uterine serous/endometrial, bladder/urothelial, and cervical hypotheses for first-pass pressure testing. ORR and prevalence come from separate public datasets, so the matrix is an expansion-screening framework, not an efficacy comparison.
       </ChartNote>
+    </div>
+  );
+}
+
+function RankedBarPanel({ title, message, footnote, children }: { title: string; message: string; footnote: string; children: ReactNode }) {
+  return (
+    <div className="rounded-xl border border-border/80 bg-background p-4">
+      <p className="text-sm font-semibold text-foreground">{title}</p>
+      <p className="mt-1 text-xs leading-5 text-muted-foreground">{message}</p>
+      <div className="mt-4 space-y-3">{children}</div>
+      <p className="mt-4 border-t border-border/70 pt-3 text-[0.68rem] leading-5 text-muted-foreground">{footnote}</p>
+    </div>
+  );
+}
+
+function RankedBar({ label, value, max, valueLabel, tier, muted = false }: { label: string; value: number; max: number; valueLabel: string; tier: Tier; muted?: boolean }) {
+  return (
+    <div className="grid grid-cols-[1fr_1.35fr] items-center gap-3">
+      <p className="text-xs font-medium leading-5 text-foreground">{label}</p>
+      <div>
+        <div className="h-2.5 overflow-hidden rounded-full bg-muted">
+          <div
+            className={cn("h-full rounded-full", muted ? "bg-muted-foreground/25" : tierTone[tier].bar)}
+            style={{ width: `${Math.min(value / max, 1) * 100}%` }}
+          />
+        </div>
+        <p className="mt-1 text-[0.68rem] font-semibold text-muted-foreground">{valueLabel}</p>
+      </div>
+    </div>
+  );
+}
+
+function formatPercent(value: number) {
+  return `${value.toFixed(1)}%`;
+}
+
+function HeatCell({ value }: { value: number }) {
+  const tone =
+    value >= 5
+      ? "bg-emerald-600 text-white"
+      : value === 4
+        ? "bg-emerald-200 text-emerald-950"
+        : value === 3
+          ? "bg-amber-200 text-amber-950"
+          : value === 2
+            ? "bg-orange-100 text-orange-950"
+            : "bg-rose-100 text-rose-950";
+
+  return (
+    <div className="border-t border-border/70 py-3">
+      <span className={cn("inline-flex h-7 w-9 items-center justify-center rounded-md text-xs font-semibold", tone)}>
+        {value}
+      </span>
     </div>
   );
 }

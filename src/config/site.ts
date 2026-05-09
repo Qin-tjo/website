@@ -9,10 +9,21 @@ export type ProjectVisual =
         tumor: string;
         prevalence: number;
         prevalenceLabel?: string;
+        prevalenceN: number;
+        prevalencePositive: number;
         response: number | null;
         responseN: number | null;
         screenBurden: string;
         priority: "High" | "Medium" | "Low";
+        finalRank: number;
+        finalScore: number;
+        matrix: {
+          response: number;
+          prevalence: number;
+          screening: number;
+          differentiation: number;
+        };
+        rationale: string;
       }[];
     }
   | {
@@ -202,21 +213,10 @@ export const siteConfig = {
         "DESTINY-PanTumor02 centrally confirmed IHC 3+ cohorts were small: endometrial 84.6% ORR (n=13), cervical 75.0% (n=8), ovarian 63.6% (n=11), bladder 56.3% (n=16), biliary tract 56.3% (n=16), and pancreatic 0% (n=2).",
         "A 65,075-sample real-world study reported IHC 3+ prevalence ranging from 13.9% in bladder cancer and 13.6% in uterine serous carcinoma to 1.1% in pancreatic adenocarcinoma.",
       ],
-      table: {
-        columns: ["Segment", "Prevalence evidence", "ORR evidence", "Priority", "Decision logic"],
-        rows: [
-          ["Endometrial / uterine serous IHC 3+", "13.6% uterine serous (152/1119); 2.7% uterine endometrial (107/4029)", "84.6% ORR (n=13)", "High", "Near-term pressure test: strong endometrial response signal plus a high-yield uterine serous screening path. Confirm histology-specific assay, tissue access, and line-of-therapy fit."],
-          ["Bladder / urothelial IHC 3+", "13.9% (246/1767)", "56.3% ORR (n=16)", "High", "Near-term pressure test: strongest prevalence signal among shown tumor types with supportive response. The key question is differentiation versus existing HER2-directed and other bladder standards."],
-          ["Cervical IHC 3+", "4.8% (57/1190)", "75.0% ORR (n=8)", "High", "Near-term pressure test if tissue workflow is practical. The response signal is strong but rests on very small N, so screen-failure and confidence intervals matter."],
-          ["Ovarian epithelial IHC 3+", "2.9% (166/5644)", "63.6% ORR (n=11)", "Medium", "Plausible but not first-line for a broad expansion bet. Response is encouraging, while prevalence is lower and HER2 biology may be subtype-dependent."],
-          ["Biliary tract IHC 3+", "3.4% cholangiocarcinoma/gallbladder (43/1275)", "56.3% ORR (n=16)", "Medium", "Biologically credible, but harder as a differentiated expansion choice because HER2-directed options already exist in this disease area."],
-          ["Pancreatic IHC 3+", "1.1% (37/3468)", "0% ORR (n=2)", "Low", "Hold unless the asset has a pancreatic-specific rationale. Public data show low prevalence and no response in an extremely small IHC 3+ subset."],
-        ],
-      },
       interpretation: [
-        "The high-priority group is not a claim of proven best indication; it is the first group to pressure-test because response signal and screening feasibility look most favorable in public data.",
-        "Endometrial should be treated as a histology-specific question: the response signal is from an endometrial IHC 3+ cohort, while the strongest prevalence signal is in uterine serous carcinoma.",
-        "Medium-priority tumors may still be valuable, but they need a clearer differentiation, subtype, tissue-logistics, or asset-specific rationale before broad expansion.",
+        "ORR ranking alone would over-rank small cohorts; prevalence ranking alone would over-rank screening yield. The priority matrix forces those signals to be read together.",
+        "Endometrial is a histology-specific opportunity: DESTINY-PanTumor02 reports an endometrial IHC 3+ response signal, while real-world screening yield is strongest in uterine serous carcinoma.",
+        "Ovarian and biliary tract remain plausible follow-ons, but they need clearer differentiation, subtype logic, or asset-specific data before broad expansion.",
       ],
       recommendation:
         "Use uterine serous/endometrial, bladder/urothelial, and cervical IHC 3+ disease as the first expansion hypotheses to pressure-test; keep ovarian and biliary tract as conditional follow-ons, and deprioritize pancreatic unless internal data change the biology.",
@@ -224,15 +224,99 @@ export const siteConfig = {
         "The ranking would change with asset-specific potency, bystander effect, toxicity, internal IHC prevalence, tissue availability, line-of-therapy assumptions, and the low patient N in several IHC 3+ cohorts.",
       visual: {
         kind: "her2-expansion",
-        title: "HER2 IHC 3+ response signal versus screening burden",
-        subtitle: "Public-data view combining real-world IHC 3+ prevalence with DESTINY-PanTumor02 IHC 3+ ORR and cohort N.",
+        title: "HER2 IHC 3+ expansion prioritization",
+        subtitle: "Three public-data views: response rank, screening-yield rank, and an evidence-backed prioritization matrix.",
         rows: [
-          { tumor: "Endometrial / uterine serous", prevalence: 13.6, prevalenceLabel: "13.6% serous (152/1119); 2.7% endometrial (107/4029)", response: 84.6, responseN: 13, screenBurden: "~7 screened in uterine serous", priority: "High" },
-          { tumor: "Bladder / urothelial", prevalence: 13.9, prevalenceLabel: "13.9% (246/1767)", response: 56.3, responseN: 16, screenBurden: "~7 screened per IHC 3+", priority: "High" },
-          { tumor: "Cervical", prevalence: 4.8, prevalenceLabel: "4.8% (57/1190)", response: 75.0, responseN: 8, screenBurden: "~21 screened per IHC 3+", priority: "High" },
-          { tumor: "Ovarian epithelial", prevalence: 2.9, prevalenceLabel: "2.9% (166/5644)", response: 63.6, responseN: 11, screenBurden: "~34 screened per IHC 3+", priority: "Medium" },
-          { tumor: "Biliary tract", prevalence: 3.4, prevalenceLabel: "3.4% (43/1275)", response: 56.3, responseN: 16, screenBurden: "~29 screened per IHC 3+", priority: "Medium" },
-          { tumor: "Pancreatic", prevalence: 1.1, prevalenceLabel: "1.1% (37/3468)", response: 0, responseN: 2, screenBurden: "~91 screened per IHC 3+", priority: "Low" },
+          {
+            tumor: "Endometrial / uterine serous",
+            prevalence: 13.6,
+            prevalenceLabel: "13.6% serous (152/1119); 2.7% endometrial (107/4029)",
+            prevalenceN: 1119,
+            prevalencePositive: 152,
+            response: 84.6,
+            responseN: 13,
+            screenBurden: "~7 screened in uterine serous",
+            priority: "High",
+            finalRank: 1,
+            finalScore: 4.5,
+            matrix: { response: 5, prevalence: 5, screening: 5, differentiation: 3 },
+            rationale: "Best combined case: strongest ORR, high-yield uterine serous screening, and clear histology-specific question.",
+          },
+          {
+            tumor: "Bladder / urothelial",
+            prevalence: 13.9,
+            prevalenceLabel: "13.9% (246/1767)",
+            prevalenceN: 1767,
+            prevalencePositive: 246,
+            response: 56.3,
+            responseN: 16,
+            screenBurden: "~7 screened per IHC 3+",
+            priority: "High",
+            finalRank: 2,
+            finalScore: 4.0,
+            matrix: { response: 3, prevalence: 5, screening: 5, differentiation: 3 },
+            rationale: "Highest prevalence and reasonable response signal; differentiation and treatment-sequencing questions need work.",
+          },
+          {
+            tumor: "Cervical",
+            prevalence: 4.8,
+            prevalenceLabel: "4.8% (57/1190)",
+            prevalenceN: 1190,
+            prevalencePositive: 57,
+            response: 75.0,
+            responseN: 8,
+            screenBurden: "~21 screened per IHC 3+",
+            priority: "High",
+            finalRank: 3,
+            finalScore: 3.8,
+            matrix: { response: 5, prevalence: 3, screening: 3, differentiation: 4 },
+            rationale: "Strong ORR but very small response cohort and lower screening yield than uterine serous or bladder.",
+          },
+          {
+            tumor: "Ovarian epithelial",
+            prevalence: 2.9,
+            prevalenceLabel: "2.9% (166/5644)",
+            prevalenceN: 5644,
+            prevalencePositive: 166,
+            response: 63.6,
+            responseN: 11,
+            screenBurden: "~34 screened per IHC 3+",
+            priority: "Medium",
+            finalRank: 4,
+            finalScore: 3.3,
+            matrix: { response: 4, prevalence: 3, screening: 3, differentiation: 3 },
+            rationale: "Encouraging response signal, but lower prevalence and likely subtype dependence make it a follow-on hypothesis.",
+          },
+          {
+            tumor: "Biliary tract",
+            prevalence: 3.4,
+            prevalenceLabel: "3.4% cholangiocarcinoma/gallbladder (43/1275)",
+            prevalenceN: 1275,
+            prevalencePositive: 43,
+            response: 56.3,
+            responseN: 16,
+            screenBurden: "~29 screened per IHC 3+",
+            priority: "Medium",
+            finalRank: 5,
+            finalScore: 2.8,
+            matrix: { response: 3, prevalence: 3, screening: 3, differentiation: 2 },
+            rationale: "Biologically credible, but competitive differentiation is harder because HER2-directed options already exist.",
+          },
+          {
+            tumor: "Pancreatic",
+            prevalence: 1.1,
+            prevalenceLabel: "1.1% (37/3468)",
+            prevalenceN: 3468,
+            prevalencePositive: 37,
+            response: 0,
+            responseN: 2,
+            screenBurden: "~91 screened per IHC 3+",
+            priority: "Low",
+            finalRank: 6,
+            finalScore: 1.0,
+            matrix: { response: 1, prevalence: 1, screening: 1, differentiation: 1 },
+            rationale: "Low prevalence and no public response signal in an extremely small IHC 3+ subset.",
+          },
         ],
       },
       references: [
