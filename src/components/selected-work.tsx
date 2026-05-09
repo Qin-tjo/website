@@ -182,6 +182,7 @@ function Her2ExpansionVisual({ visual }: { visual: Extract<ProjectVisual, { kind
               valueLabel={row.response === null ? "n/a" : `${formatPercent(row.response)} ORR (n=${row.responseN})`}
               tier={row.priority}
               muted={row.response === null}
+              neutral
             />
           ))}
         </RankedBarPanel>
@@ -199,6 +200,7 @@ function Her2ExpansionVisual({ visual }: { visual: Extract<ProjectVisual, { kind
               max={maxPrevalence}
               valueLabel={row.prevalenceLabel ?? `${row.prevalence}% (${row.prevalencePositive}/${row.prevalenceN})`}
               tier={row.priority}
+              neutral
             />
           ))}
         </RankedBarPanel>
@@ -211,8 +213,8 @@ function Her2ExpansionVisual({ visual }: { visual: Extract<ProjectVisual, { kind
             Final rank integrates response strength, prevalence/screening yield, and practical differentiation. Scores are 1-5 directional judgments from public data.
           </p>
         </div>
-        <div className="grid grid-cols-[1.2fr_0.55fr_0.62fr_0.62fr_0.62fr_0.72fr_0.62fr_1.5fr] gap-2 p-4 text-xs">
-          {["Segment", "ORR", "Prevalence", "Screening", "Differentiation", "Overall", "Priority", "Logic"].map((header) => (
+        <div className="grid grid-cols-[1.05fr_0.5fr_0.6fr_0.6fr_0.65fr_0.58fr_0.62fr_1.65fr] gap-2 p-4 text-xs">
+          {["Segment", "ORR", "Prevalence", "Screening", "Differentiation", "Overall", "Priority", "Evidence behind rank"].map((header) => (
             <p key={header} className="text-[0.62rem] font-semibold uppercase tracking-[0.11em] text-foreground/50">{header}</p>
           ))}
           {priorityRows.map((row) => (
@@ -231,13 +233,17 @@ function Her2ExpansionVisual({ visual }: { visual: Extract<ProjectVisual, { kind
               <div className="border-t border-border/70 py-3">
                 <PriorityPill priority={row.priority} />
               </div>
-              <p className="border-t border-border/70 py-3 leading-5 text-muted-foreground">{row.rationale}</p>
+              <div className="space-y-1 border-t border-border/70 py-3 leading-5 text-muted-foreground">
+                <p>{row.rationale}</p>
+                <p><span className="font-semibold text-foreground/70">Screening:</span> {row.screeningEvidence}</p>
+                <p><span className="font-semibold text-foreground/70">Differentiation:</span> {row.differentiationEvidence}</p>
+              </div>
             </div>
           ))}
         </div>
         <div className="border-t border-border/70 px-4 py-3">
           <p className="text-[0.68rem] leading-5 text-muted-foreground">
-            Annotation: response score considers ORR and IHC 3+ cohort N; prevalence and screening scores use real-world IHC 3+ rate and approximate patients screened per positive; differentiation reflects public competitive and histology-specific context. Overall score is the average of the four displayed evidence dimensions.
+            Annotation: response score considers ORR and IHC 3+ cohort N; prevalence and screening scores use real-world IHC 3+ rate and approximate patients screened per positive; differentiation reflects public competitive and histology-specific context, including whether a clear histology-specific question or an existing HER2-directed standard changes the opportunity. Overall score is the average of the four displayed evidence dimensions.
           </p>
         </div>
       </div>
@@ -260,14 +266,30 @@ function RankedBarPanel({ title, message, footnote, children }: { title: string;
   );
 }
 
-function RankedBar({ label, value, max, valueLabel, tier, muted = false }: { label: string; value: number; max: number; valueLabel: string; tier: Tier; muted?: boolean }) {
+function RankedBar({
+  label,
+  value,
+  max,
+  valueLabel,
+  tier,
+  muted = false,
+  neutral = false,
+}: {
+  label: string;
+  value: number;
+  max: number;
+  valueLabel: string;
+  tier: Tier;
+  muted?: boolean;
+  neutral?: boolean;
+}) {
   return (
     <div className="grid grid-cols-[1fr_1.35fr] items-center gap-3">
       <p className="text-xs font-medium leading-5 text-foreground">{label}</p>
       <div>
         <div className="h-2.5 overflow-hidden rounded-full bg-muted">
           <div
-            className={cn("h-full rounded-full", muted ? "bg-muted-foreground/25" : tierTone[tier].bar)}
+            className={cn("h-full rounded-full", muted ? "bg-muted-foreground/25" : neutral ? "bg-primary/70" : tierTone[tier].bar)}
             style={{ width: `${Math.min(value / max, 1) * 100}%` }}
           />
         </div>

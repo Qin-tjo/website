@@ -23,6 +23,8 @@ export type ProjectVisual =
           screening: number;
           differentiation: number;
         };
+        screeningEvidence: string;
+        differentiationEvidence: string;
         rationale: string;
       }[];
     }
@@ -238,8 +240,10 @@ export const siteConfig = {
             screenBurden: "~7 screened in uterine serous",
             priority: "High",
             finalRank: 1,
-            finalScore: 4.5,
-            matrix: { response: 5, prevalence: 5, screening: 5, differentiation: 3 },
+            finalScore: 4.8,
+            matrix: { response: 5, prevalence: 5, screening: 5, differentiation: 4 },
+            screeningEvidence: "High-yield uterine serous path: ~7 screened per IHC 3+ using 152/1119 prevalence signal.",
+            differentiationEvidence: "Histology-specific opportunity: response signal is endometrial; prevalence enrichment is strongest in uterine serous.",
             rationale: "Best combined case: strongest ORR, high-yield uterine serous screening, and clear histology-specific question.",
           },
           {
@@ -255,6 +259,8 @@ export const siteConfig = {
             finalRank: 2,
             finalScore: 4.0,
             matrix: { response: 3, prevalence: 5, screening: 5, differentiation: 3 },
+            screeningEvidence: "Highest broad screening yield shown: 246/1767 IHC 3+ (~7 screened per positive).",
+            differentiationEvidence: "Attractive yield, but differentiation must be framed against existing HER2-directed and bladder treatment options.",
             rationale: "Highest prevalence and reasonable response signal; differentiation and treatment-sequencing questions need work.",
           },
           {
@@ -268,8 +274,10 @@ export const siteConfig = {
             screenBurden: "~21 screened per IHC 3+",
             priority: "High",
             finalRank: 3,
-            finalScore: 3.8,
-            matrix: { response: 5, prevalence: 3, screening: 3, differentiation: 4 },
+            finalScore: 3.5,
+            matrix: { response: 4, prevalence: 3, screening: 3, differentiation: 4 },
+            screeningEvidence: "Moderate screening burden: 57/1190 IHC 3+ (~21 screened per positive).",
+            differentiationEvidence: "Fewer HER2-directed cervical standards make the signal strategically interesting, but ORR rests on n=8.",
             rationale: "Strong ORR but very small response cohort and lower screening yield than uterine serous or bladder.",
           },
           {
@@ -283,8 +291,10 @@ export const siteConfig = {
             screenBurden: "~34 screened per IHC 3+",
             priority: "Medium",
             finalRank: 4,
-            finalScore: 3.3,
-            matrix: { response: 4, prevalence: 3, screening: 3, differentiation: 3 },
+            finalScore: 2.8,
+            matrix: { response: 4, prevalence: 2, screening: 2, differentiation: 3 },
+            screeningEvidence: "Lower screening yield despite large denominator: 166/5644 IHC 3+ (~34 screened per positive).",
+            differentiationEvidence: "Potentially subtype-dependent HER2 biology; useful follow-on if asset biology or subtype data support it.",
             rationale: "Encouraging response signal, but lower prevalence and likely subtype dependence make it a follow-on hypothesis.",
           },
           {
@@ -298,8 +308,10 @@ export const siteConfig = {
             screenBurden: "~29 screened per IHC 3+",
             priority: "Medium",
             finalRank: 5,
-            finalScore: 2.8,
-            matrix: { response: 3, prevalence: 3, screening: 3, differentiation: 2 },
+            finalScore: 2.5,
+            matrix: { response: 3, prevalence: 3, screening: 2, differentiation: 2 },
+            screeningEvidence: "Moderate-to-low screening yield: 43/1275 IHC 3+ (~29 screened per positive).",
+            differentiationEvidence: "HER2-directed biliary tract approval creates a higher bar for differentiation.",
             rationale: "Biologically credible, but competitive differentiation is harder because HER2-directed options already exist.",
           },
           {
@@ -315,6 +327,8 @@ export const siteConfig = {
             finalRank: 6,
             finalScore: 1.0,
             matrix: { response: 1, prevalence: 1, screening: 1, differentiation: 1 },
+            screeningEvidence: "Weakest screening yield shown: 37/3468 IHC 3+ (~91 screened per positive).",
+            differentiationEvidence: "No public IHC 3+ response signal in PanTumor02 (n=2); needs a distinct asset-specific rationale.",
             rationale: "Low prevalence and no public response signal in an extremely small IHC 3+ subset.",
           },
         ],
