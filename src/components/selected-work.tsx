@@ -2,6 +2,7 @@
 
 import { ArrowRight, FileText } from "lucide-react";
 import { useState } from "react";
+import type { ReactNode } from "react";
 
 import { FadeIn } from "@/components/motion";
 import { SectionHeading } from "@/components/section-heading";
@@ -139,6 +140,7 @@ function ArtifactVisual({ visual }: { visual: ProjectVisual }) {
       <div className="border-b border-border/70 bg-primary/[0.04] px-4 py-3">
         <p className="text-sm font-semibold text-foreground">{visual.title}</p>
         <p className="mt-1 text-xs leading-5 text-muted-foreground">{visual.subtitle}</p>
+        <TierLegend />
       </div>
       <div className="overflow-x-auto p-4">
         {visual.kind === "her2-expansion" ? <Her2ExpansionVisual visual={visual} /> : null}
@@ -173,6 +175,9 @@ function Her2ExpansionVisual({ visual }: { visual: Extract<ProjectVisual, { kind
           <PriorityPill priority={row.priority} />
         </div>
       ))}
+      <ChartNote>
+        ORR values are from DESTINY-PanTumor02 IHC 3+ cohorts; prevalence values are from a separate real-world IHC dataset. This view is for expansion prioritization, not a cross-trial efficacy comparison.
+      </ChartNote>
     </div>
   );
 }
@@ -192,12 +197,15 @@ function Cldn6ReadinessVisual({ visual }: { visual: Extract<ProjectVisual, { kin
         <div key={row.tumor} className="grid grid-cols-[1.05fr_1.05fr_0.65fr_0.65fr_0.65fr_0.65fr] items-center gap-3 text-xs">
           <p className="font-medium text-foreground">{row.tumor}</p>
           <p className="leading-5 text-muted-foreground">{row.prevalence}</p>
-          <ScoreDots value={row.assay} />
-          <ScoreDots value={row.tissue} />
-          <ScoreDots value={row.trial} />
+          <ScoreDots value={row.assay} tier={row.confidence} />
+          <ScoreDots value={row.tissue} tier={row.confidence} />
+          <ScoreDots value={row.trial} tier={row.confidence} />
           <ConfidencePill confidence={row.confidence} />
         </div>
       ))}
+      <ChartNote>
+        Readiness scores are qualitative public-data judgments. Internal cutoff, staining, tissue workflow, and expression-response data would change confidence.
+      </ChartNote>
     </div>
   );
 }
@@ -237,6 +245,9 @@ function TargetRankingVisual({ visual }: { visual: Extract<ProjectVisual, { kind
           </div>
         ))}
       </div>
+      <ChartNote>
+        Synthetic ADC-style score: target expression 30%, normal tissue safety 20%, assay readiness 20%, trial feasibility 15%, whitespace 15%.
+      </ChartNote>
     </div>
   );
 }
@@ -286,6 +297,9 @@ function BiomarkerReviewVisual({ visual }: { visual: Extract<ProjectVisual, { ki
           ))}
         </div>
       </div>
+      <ChartNote className="lg:col-span-2">
+        Synthetic patient-level data. Colors encode target tier; missing assays and paired biopsies are shown because they directly affect interpretation confidence.
+      </ChartNote>
     </div>
   );
 }
@@ -329,13 +343,34 @@ function MetricBar({ value, max, label, tier, muted = false }: { value: number; 
   );
 }
 
-function ScoreDots({ value }: { value: number }) {
+function ScoreDots({ value, tier }: { value: number; tier: Tier }) {
   return (
     <div className="flex gap-1">
       {Array.from({ length: 5 }).map((_, index) => (
-        <span key={index} className={cn("h-1.5 w-1.5 rounded-full", index < value ? "bg-primary" : "bg-muted")} />
+        <span key={index} className={cn("h-1.5 w-1.5 rounded-full", index < value ? tierTone[tier].bar : "bg-muted")} />
       ))}
     </div>
+  );
+}
+
+function TierLegend() {
+  return (
+    <div className="mt-3 flex flex-wrap gap-2">
+      {(["High", "Medium", "Low"] as Tier[]).map((tier) => (
+        <span key={tier} className="inline-flex items-center gap-1.5 text-[0.68rem] font-medium text-muted-foreground">
+          <span className={cn("h-2 w-2 rounded-full", tierTone[tier].bar)} />
+          {tier}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+function ChartNote({ children, className }: { children: ReactNode; className?: string }) {
+  return (
+    <p className={cn("rounded-lg border border-border/70 bg-muted/35 px-3 py-2 text-[0.7rem] leading-5 text-muted-foreground", className)}>
+      {children}
+    </p>
   );
 }
 
@@ -369,7 +404,7 @@ function ProjectTable({ columns, rows }: { columns: string[]; rows: string[][] }
   return (
     <div className="overflow-hidden rounded-xl border border-border/80 bg-background">
       <div className="overflow-x-auto">
-        <table className="min-w-full text-left text-xs">
+        <table className="min-w-[680px] text-left text-xs">
           <thead className="bg-primary/[0.06] text-foreground">
             <tr>
               {columns.map((column) => (

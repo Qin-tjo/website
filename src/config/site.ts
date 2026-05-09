@@ -203,7 +203,7 @@ export const siteConfig = {
       table: {
         columns: ["Segment", "Priority", "Decision logic"],
         rows: [
-          ["Uterine serous / endometrial IHC 3+", "High", "High IHC 3+ prevalence in uterine serous disease plus strong endometrial response signal."],
+          ["Endometrial IHC 3+", "High", "Strong endometrial response signal; uterine serous subhistology has high IHC 3+ prevalence."],
           ["Bladder / urothelial IHC 3+", "High", "High prevalence and response signal; sequencing and Nectin-4 ADC context matter."],
           ["Cervical IHC 3+", "High", "Strong public response signal; small cohort and screening assumptions need pressure testing."],
           ["Biliary tract IHC 3+", "Medium", "Validated HER2 biology but now a differentiation problem after zanidatamab approval."],
@@ -222,12 +222,12 @@ export const siteConfig = {
       visual: {
         kind: "her2-expansion",
         title: "HER2 IHC 3+ signal versus screening burden",
-        subtitle: "Public-data view combining reported prevalence with IHC 3+ response signal where available.",
+        subtitle: "Public-data view combining reported IHC 3+ prevalence with IHC 3+ response signal where available.",
         rows: [
-          { tumor: "Uterine serous", prevalence: 13.6, response: 84.6, screenBurden: "~7 screened per IHC 3+", priority: "High" },
+          { tumor: "Endometrial", prevalence: 2.7, response: 84.6, screenBurden: "~37 screened per IHC 3+", priority: "High" },
           { tumor: "Bladder", prevalence: 13.9, response: 56.3, screenBurden: "~7 screened per IHC 3+", priority: "High" },
-          { tumor: "Cervical", prevalence: 4.2, response: 75.0, screenBurden: "~24 screened per IHC 3+", priority: "High" },
-          { tumor: "Biliary tract", prevalence: 5.3, response: 56.3, screenBurden: "~19 screened per IHC 3+", priority: "Medium" },
+          { tumor: "Cervical", prevalence: 4.8, response: 75.0, screenBurden: "~21 screened per IHC 3+", priority: "High" },
+          { tumor: "Biliary tract", prevalence: 3.4, response: 56.3, screenBurden: "~29 screened per IHC 3+", priority: "Medium" },
           { tumor: "Ovarian epithelial", prevalence: 2.9, response: 63.6, screenBurden: "~34 screened per IHC 3+", priority: "Medium" },
           { tumor: "Pancreatic", prevalence: 1.1, response: 0, screenBurden: "~91 screened per IHC 3+", priority: "Low" },
         ],
@@ -278,7 +278,7 @@ export const siteConfig = {
       visual: {
         kind: "cldn6-readiness",
         title: "CLDN6 expansion readiness is not prevalence alone",
-        subtitle: "Qualitative readiness view: 1 = weak/public gap, 5 = strong public support.",
+        subtitle: "Qualitative readiness view: 1 = weak public support, 5 = strong public support.",
         rows: [
           { tumor: "Ovarian follow-ons", prevalence: "29-45% public IHC signal", assay: 4, tissue: 4, trial: 4, confidence: "High" },
           { tumor: "Endometrial", prevalence: "11% public IHC signal", assay: 3, tissue: 4, trial: 3, confidence: "Medium" },
@@ -314,11 +314,11 @@ export const siteConfig = {
       table: {
         columns: ["Rank", "Candidate", "Score", "Confidence", "Decision gate"],
         rows: [
-          ["1", "Biomarker-high subtype", "4.2", "Medium-high", "Open expansion if assay cutoff and tissue success are confirmed."],
-          ["2", "Resistant-line setting", "3.9", "Medium", "Advance after cutoff and normal tissue review."],
-          ["3", "Molecularly enriched subset", "3.8", "Medium", "Run focused prevalence and feasibility study."],
-          ["4", "Broad unselected population", "3.2", "Low-medium", "Hold unless enriched subgroup emerges."],
-          ["5", "Rare high-expression population", "3.1", "Medium", "Consider lifecycle or investigator-led path."],
+          ["1", "Biomarker-high subtype", "4.3", "High", "Open expansion if assay cutoff and tissue success are confirmed."],
+          ["2", "Rare high-expression population", "3.9", "Medium", "Consider lifecycle or investigator-led path; feasibility is limiting."],
+          ["3", "Resistant-line setting", "3.8", "Medium", "Advance after cutoff and normal tissue review."],
+          ["4", "Molecularly enriched subset", "3.6", "Medium", "Run focused prevalence and feasibility study."],
+          ["5", "Broad unselected population", "3.3", "Low", "Hold unless enriched subgroup emerges."],
         ],
       },
       interpretation: [
@@ -343,10 +343,10 @@ export const siteConfig = {
         ],
         rows: [
           { candidate: "Biomarker-high subtype", expression: 5, safety: 4, assay: 4, feasibility: 4, competition: 4, confidence: "High" },
+          { candidate: "Rare high-expression group", expression: 5, safety: 4, assay: 2, feasibility: 1, competition: 5, confidence: "Medium" },
           { candidate: "Resistant-line setting", expression: 4, safety: 4, assay: 3, feasibility: 4, competition: 4, confidence: "Medium" },
           { candidate: "Molecularly enriched subset", expression: 4, safety: 3, assay: 3, feasibility: 3, competition: 5, confidence: "Medium" },
           { candidate: "Broad unselected population", expression: 3, safety: 3, assay: 4, feasibility: 5, competition: 2, confidence: "Low" },
-          { candidate: "Rare high-expression group", expression: 5, safety: 4, assay: 2, feasibility: 1, competition: 5, confidence: "Medium" },
         ],
       },
       references: [
