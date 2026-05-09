@@ -157,11 +157,11 @@ function Her2ExpansionVisual({ visual }: { visual: Extract<ProjectVisual, { kind
   const maxPrevalence = 15;
 
   return (
-    <div className="min-w-[680px] space-y-3">
+    <div className="min-w-[760px] space-y-3">
       <div className="grid grid-cols-[1.05fr_1fr_1fr_0.7fr] gap-3 text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-foreground/50">
         <span>Tumor</span>
         <span>IHC 3+ prevalence</span>
-        <span>IHC 3+ ORR</span>
+        <span>IHC 3+ ORR (N)</span>
         <span>Priority</span>
       </div>
       {visual.rows.map((row) => (
@@ -170,13 +170,19 @@ function Her2ExpansionVisual({ visual }: { visual: Extract<ProjectVisual, { kind
             <p className="font-medium text-foreground">{row.tumor}</p>
             <p className="mt-0.5 text-[0.68rem] text-muted-foreground">{row.screenBurden}</p>
           </div>
-          <MetricBar value={row.prevalence} max={maxPrevalence} label={`${row.prevalence}%`} tier={row.priority} />
-          <MetricBar value={row.response ?? 0} max={maxResponse} label={row.response === null ? "n/a" : `${row.response}%`} tier={row.priority} muted={row.response === null} />
+          <MetricBar value={row.prevalence} max={maxPrevalence} label={row.prevalenceLabel ?? `${row.prevalence}%`} tier={row.priority} />
+          <MetricBar
+            value={row.response ?? 0}
+            max={maxResponse}
+            label={row.response === null ? "n/a" : `${row.response}%${row.responseN ? ` (n=${row.responseN})` : ""}`}
+            tier={row.priority}
+            muted={row.response === null}
+          />
           <PriorityPill priority={row.priority} />
         </div>
       ))}
       <ChartNote>
-        ORR values are from DESTINY-PanTumor02 IHC 3+ cohorts; prevalence values are from a separate real-world IHC dataset. This view is for expansion prioritization, not a cross-trial efficacy comparison.
+        Ranking is a qualitative expansion screen: IHC 3+ response signal, cohort N, real-world IHC 3+ prevalence, approximate screening burden, tissue practicality, and competitive context are read together. ORR values are from small DESTINY-PanTumor02 IHC 3+ cohorts; prevalence values are from a separate real-world IHC dataset, so this is not a cross-trial efficacy comparison.
       </ChartNote>
     </div>
   );

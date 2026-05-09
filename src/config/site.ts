@@ -8,7 +8,9 @@ export type ProjectVisual =
       rows: {
         tumor: string;
         prevalence: number;
+        prevalenceLabel?: string;
         response: number | null;
+        responseN: number | null;
         screenBurden: string;
         priority: "High" | "Medium" | "Low";
       }[];
@@ -197,17 +199,18 @@ export const siteConfig = {
         "Public-data indication expansion prioritization for a HER2-directed targeted oncology asset.",
       evidence: [
         "FDA granted tumor-agnostic accelerated approval for T-DXd in HER2-positive IHC 3+ solid tumors in 2024.",
-        "DESTINY-PanTumor02 IHC 3+ ORR varied by cohort: endometrial 84.6%, cervical 75.0%, ovarian 63.6%, bladder 56.3%, biliary tract 56.3%, pancreatic 0%.",
+        "DESTINY-PanTumor02 centrally confirmed IHC 3+ cohorts were small: endometrial 84.6% ORR (n=13), cervical 75.0% (n=8), ovarian 63.6% (n=11), bladder 56.3% (n=16), biliary tract 56.3% (n=16), and pancreatic 0% (n=2).",
         "A 65,075-sample real-world study reported IHC 3+ prevalence ranging from 13.9% in bladder cancer and 13.6% in uterine serous carcinoma to 1.1% in pancreatic adenocarcinoma.",
       ],
       table: {
-        columns: ["Segment", "Priority", "Decision logic"],
+        columns: ["Segment", "ORR evidence", "Priority", "Decision logic"],
         rows: [
-          ["Endometrial IHC 3+", "High", "Strong endometrial response signal; uterine serous subhistology has high IHC 3+ prevalence."],
-          ["Bladder / urothelial IHC 3+", "High", "High prevalence and response signal; sequencing and Nectin-4 ADC context matter."],
-          ["Cervical IHC 3+", "High", "Strong public response signal; small cohort and screening assumptions need pressure testing."],
-          ["Biliary tract IHC 3+", "Medium", "Validated HER2 biology but now a differentiation problem after zanidatamab approval."],
-          ["Pancreatic IHC 3+", "Low", "Low prevalence and weak public IHC 3+ response signal."],
+          ["Endometrial / uterine serous IHC 3+", "84.6% ORR (n=13)", "High", "Strong response signal and high IHC 3+ prevalence in uterine serous carcinoma; confirm histology-specific assay and line-of-therapy fit."],
+          ["Bladder / urothelial IHC 3+", "56.3% ORR (n=16)", "High", "Best prevalence signal among shown tumor types with supportive response; sequencing and Nectin-4 ADC context matter."],
+          ["Cervical IHC 3+", "75.0% ORR (n=8)", "High", "High response signal, but the cohort is very small; rank depends on tissue access and screening assumptions."],
+          ["Ovarian epithelial IHC 3+", "63.6% ORR (n=11)", "Medium", "Response signal is meaningful, but IHC 3+ prevalence is lower and ovarian HER2 biology may be subtype-dependent."],
+          ["Biliary tract IHC 3+", "56.3% ORR (n=16)", "Medium", "Validated HER2 biology, but differentiation is harder after HER2-directed approvals and subtype mix matters."],
+          ["Pancreatic IHC 3+", "0% ORR (n=2)", "Low", "Low prevalence and no response in an extremely small IHC 3+ public subset."],
         ],
       },
       interpretation: [
@@ -218,18 +221,18 @@ export const siteConfig = {
       recommendation:
         "Prioritize IHC 3+ uterine serous/endometrial, bladder/urothelial, and cervical hypotheses first; treat biliary tract as a differentiation case and pancreatic as a low-priority public-data signal.",
       caveat:
-        "The ranking would change with asset-specific potency, bystander effect, toxicity, internal IHC prevalence, tissue availability, and line-of-therapy assumptions.",
+        "The ranking would change with asset-specific potency, bystander effect, toxicity, internal IHC prevalence, tissue availability, line-of-therapy assumptions, and the low patient N in several IHC 3+ cohorts.",
       visual: {
         kind: "her2-expansion",
-        title: "HER2 IHC 3+ signal versus screening burden",
-        subtitle: "Public-data view combining reported IHC 3+ prevalence with IHC 3+ response signal where available.",
+        title: "HER2 IHC 3+ response signal versus screening burden",
+        subtitle: "Public-data view combining real-world IHC 3+ prevalence with DESTINY-PanTumor02 IHC 3+ ORR and cohort N.",
         rows: [
-          { tumor: "Endometrial", prevalence: 2.7, response: 84.6, screenBurden: "~37 screened per IHC 3+", priority: "High" },
-          { tumor: "Bladder", prevalence: 13.9, response: 56.3, screenBurden: "~7 screened per IHC 3+", priority: "High" },
-          { tumor: "Cervical", prevalence: 4.8, response: 75.0, screenBurden: "~21 screened per IHC 3+", priority: "High" },
-          { tumor: "Biliary tract", prevalence: 3.4, response: 56.3, screenBurden: "~29 screened per IHC 3+", priority: "Medium" },
-          { tumor: "Ovarian epithelial", prevalence: 2.9, response: 63.6, screenBurden: "~34 screened per IHC 3+", priority: "Medium" },
-          { tumor: "Pancreatic", prevalence: 1.1, response: 0, screenBurden: "~91 screened per IHC 3+", priority: "Low" },
+          { tumor: "Endometrial", prevalence: 2.7, prevalenceLabel: "2.7% overall; 13.6% uterine serous", response: 84.6, responseN: 13, screenBurden: "~37 screened overall; ~7 in uterine serous", priority: "High" },
+          { tumor: "Bladder", prevalence: 13.9, response: 56.3, responseN: 16, screenBurden: "~7 screened per IHC 3+", priority: "High" },
+          { tumor: "Cervical", prevalence: 4.8, response: 75.0, responseN: 8, screenBurden: "~21 screened per IHC 3+", priority: "High" },
+          { tumor: "Ovarian epithelial", prevalence: 2.9, response: 63.6, responseN: 11, screenBurden: "~34 screened per IHC 3+", priority: "Medium" },
+          { tumor: "Biliary tract", prevalence: 3.4, response: 56.3, responseN: 16, screenBurden: "~29 screened per IHC 3+", priority: "Medium" },
+          { tumor: "Pancreatic", prevalence: 1.1, response: 0, responseN: 2, screenBurden: "~91 screened per IHC 3+", priority: "Low" },
         ],
       },
       references: [
