@@ -19,13 +19,10 @@ export function Services() {
           {siteConfig.services.map((service, index) => (
             <FadeIn key={service.title} delay={index * 0.05}>
               <Card className="h-full p-6">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center">
                   <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
                     {index + 1}
                   </span>
-                  <p className="text-xs font-semibold uppercase tracking-[0.15em] text-primary">
-                    Focus area
-                  </p>
                 </div>
                 <h3 className="mt-5 font-serif text-2xl font-semibold text-foreground">
                   {service.title}
