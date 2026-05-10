@@ -71,6 +71,7 @@ export type ProjectVisual =
     };
 
 export type Project = {
+  href?: string;
   title: string;
   category: string;
   workType: WorkType;
@@ -201,33 +202,37 @@ export const siteConfig = {
   },
   projects: [
     {
+      href: "/work/her2-expansion/",
       title: "HER2 Expansion Biomarker Sprint",
       category: "Indication expansion strategy",
       workType: "Example artifact",
       description:
-        "A public-data example showing how HER2 expression, amplification, mutation, heterogeneity, and assay practicality can shape expansion decisions.",
+        "A public-data example showing how HER2 IHC 3+ response, prevalence, screening burden, and competitive context shape non-breast expansion decisions.",
       question:
-        "For a HER2-directed asset, which tumor segments deserve expansion investment beyond a broad HER2-positive basket?",
+        "For a HER2-directed oncology asset, which non-breast HER2 IHC 3+ tumor segments deserve the next translational pressure test, and which should wait for asset-specific evidence?",
       context:
-        "Public-data indication expansion prioritization for a HER2-directed targeted oncology asset.",
+        "Public-data indication expansion prioritization for non-breast HER2 IHC 3+ solid tumors. HER2-positive breast cancer is excluded by design because it is already a mature HER2-defined disease area with established biomarker infrastructure; this example asks where non-breast expansion logic is strongest.",
       evidence: [
         "FDA granted tumor-agnostic accelerated approval for T-DXd in HER2-positive IHC 3+ solid tumors in 2024.",
         "DESTINY-PanTumor02 centrally confirmed IHC 3+ cohorts were small: endometrial 84.6% ORR (n=13), cervical 75.0% (n=8), ovarian 63.6% (n=11), bladder 56.3% (n=16), biliary tract 56.3% (n=16), and pancreatic 0% (n=2).",
         "A 65,075-sample real-world study reported IHC 3+ prevalence ranging from 13.9% in bladder cancer and 13.6% in uterine serous carcinoma to 1.1% in pancreatic adenocarcinoma.",
+        "HER2-positive breast cancer is not missing from the analysis; it is out of scope because the decision problem is different from early non-breast expansion prioritization.",
+        "Bladder is included despite active HER2-directed development because high IHC 3+ prevalence plus a public IHC 3+ response signal make it a differentiation and sequencing question, not a blank-space opportunity.",
       ],
       interpretation: [
         "ORR ranking alone would over-rank small cohorts; prevalence ranking alone would over-rank screening yield. The priority matrix forces those signals to be read together.",
         "Endometrial is a histology-specific opportunity: DESTINY-PanTumor02 reports an endometrial IHC 3+ response signal, while real-world screening yield is strongest in uterine serous carcinoma.",
+        "Bladder should not be framed as an undiscovered opportunity. It belongs in the matrix because screening yield is high; the real decision is whether an asset can differentiate clinically, biologically, or by line-of-therapy sequence.",
         "Ovarian and biliary tract remain plausible follow-ons, but they need clearer differentiation, subtype logic, or asset-specific data before broad expansion.",
       ],
       recommendation:
-        "Use uterine serous/endometrial, bladder/urothelial, and cervical IHC 3+ disease as the first expansion hypotheses to pressure-test; keep ovarian and biliary tract as conditional follow-ons, and deprioritize pancreatic unless internal data change the biology.",
+        "Use uterine serous/endometrial disease as the cleanest first-pass hypothesis. Pressure-test bladder only with a credible differentiation or sequencing rationale; treat cervical, ovarian, and biliary tract as conditional follow-ons; deprioritize pancreatic unless internal data change the biology.",
       caveat:
         "The ranking would change with asset-specific potency, bystander effect, toxicity, internal IHC prevalence, tissue availability, line-of-therapy assumptions, and the low patient N in several IHC 3+ cohorts.",
       visual: {
         kind: "her2-expansion",
-        title: "HER2 IHC 3+ expansion prioritization",
-        subtitle: "Three public-data views: response rank, screening-yield rank, and an evidence-backed prioritization matrix.",
+        title: "HER2 IHC 3+ non-breast expansion prioritization",
+        subtitle: "Three public-data views: response evidence, screening yield, and a matrix that adds differentiation and feasibility.",
         rows: [
           {
             tumor: "Endometrial / uterine serous",
@@ -255,13 +260,13 @@ export const siteConfig = {
             response: 56.3,
             responseN: 16,
             screenBurden: "~7 screened per IHC 3+",
-            priority: "High",
+            priority: "Medium",
             finalRank: 2,
-            finalScore: 4.0,
-            matrix: { response: 3, prevalence: 5, screening: 5, differentiation: 3 },
+            finalScore: 3.8,
+            matrix: { response: 3, prevalence: 5, screening: 5, differentiation: 2 },
             screeningEvidence: "Highest broad screening yield shown: 246/1767 IHC 3+ (~7 screened per positive).",
-            differentiationEvidence: "Attractive yield, but differentiation must be framed against existing HER2-directed and bladder treatment options.",
-            rationale: "Highest prevalence and reasonable response signal; differentiation and treatment-sequencing questions need work.",
+            differentiationEvidence: "Active HER2-directed development in urothelial cancer lowers whitespace; the asset must show a credible sequencing or differentiation angle.",
+            rationale: "High prevalence and reasonable response signal make bladder worth evaluating, but only as a gated differentiation question.",
           },
           {
             tumor: "Cervical",
@@ -272,7 +277,7 @@ export const siteConfig = {
             response: 75.0,
             responseN: 8,
             screenBurden: "~21 screened per IHC 3+",
-            priority: "High",
+            priority: "Medium",
             finalRank: 3,
             finalScore: 3.5,
             matrix: { response: 4, prevalence: 3, screening: 3, differentiation: 4 },
@@ -340,6 +345,7 @@ export const siteConfig = {
         },
         { label: "DESTINY-PanTumor02 primary data", href: "https://pmc.ncbi.nlm.nih.gov/articles/PMC10730032/" },
         { label: "Real-world HER2 IHC 3+ prevalence", href: "https://pmc.ncbi.nlm.nih.gov/articles/PMC12203389/" },
+        { label: "HER2-targeted urothelial trial context", href: "https://clinicaltrials.gov/study/NCT04482309" },
         { label: "FDA Ziihera trial snapshot", href: "https://www.fda.gov/drugs/drug-trials-snapshots/drug-trials-snapshots-ziihera" },
       ],
     },

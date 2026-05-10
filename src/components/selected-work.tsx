@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowRight, FileText } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 import type { ReactNode } from "react";
 
@@ -48,7 +49,7 @@ const targetTierTone: Record<Tier, string> = {
 };
 
 export function SelectedWork() {
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(1);
   const selectedProject = siteConfig.projects[selectedIndex];
 
   return (
@@ -64,7 +65,7 @@ export function SelectedWork() {
               <Card
                 className={cn(
                   "group flex h-full flex-col overflow-hidden p-5 transition-transform duration-300 hover:-translate-y-1 hover:shadow-premium",
-                  selectedIndex === index ? "border-primary/45 bg-primary/[0.03] shadow-premium" : "bg-background/86",
+                  selectedIndex === index && !project.href ? "border-primary/45 bg-primary/[0.03] shadow-premium" : "bg-background/86",
                 )}
               >
                 <div className="flex h-full flex-col">
@@ -82,15 +83,25 @@ export function SelectedWork() {
                   <h3 className="mt-3 font-serif text-xl font-semibold leading-tight text-foreground">{project.title}</h3>
                   <p className="mt-3 text-sm leading-6 text-muted-foreground">{project.description}</p>
                   <div className="mt-auto border-t border-border/70 pt-4">
-                    <button
-                      className="inline-flex items-center gap-2 text-sm font-semibold text-primary underline-offset-4 hover:underline"
-                      type="button"
-                      aria-expanded={selectedIndex === index}
-                      onClick={() => setSelectedIndex(index)}
-                    >
-                      View artifact
-                      <ArrowRight className="h-3.5 w-3.5" />
-                    </button>
+                    {project.href ? (
+                      <Link
+                        className="inline-flex items-center gap-2 text-sm font-semibold text-primary underline-offset-4 hover:underline"
+                        href={project.href}
+                      >
+                        View full artifact
+                        <ArrowRight className="h-3.5 w-3.5" />
+                      </Link>
+                    ) : (
+                      <button
+                        className="inline-flex items-center gap-2 text-sm font-semibold text-primary underline-offset-4 hover:underline"
+                        type="button"
+                        aria-expanded={selectedIndex === index}
+                        onClick={() => setSelectedIndex(index)}
+                      >
+                        View artifact
+                        <ArrowRight className="h-3.5 w-3.5" />
+                      </button>
+                    )}
                   </div>
                 </div>
               </Card>
@@ -134,13 +145,13 @@ export function SelectedWork() {
   );
 }
 
-function ArtifactVisual({ visual }: { visual: ProjectVisual }) {
+export function ArtifactVisual({ visual }: { visual: ProjectVisual }) {
   return (
     <div className="overflow-hidden rounded-xl border border-border/80 bg-background">
       <div className="border-b border-border/70 bg-primary/[0.04] px-4 py-3">
         <p className="text-sm font-semibold text-foreground">{visual.title}</p>
         <p className="mt-1 text-xs leading-5 text-muted-foreground">{visual.subtitle}</p>
-        {visual.kind === "her2-expansion" ? <TierLegend context="her2" /> : <TierLegend />}
+        {visual.kind === "her2-expansion" ? null : <TierLegend />}
       </div>
       <div className="overflow-x-auto p-4">
         {visual.kind === "her2-expansion" ? <Her2ExpansionVisual visual={visual} /> : null}
@@ -160,17 +171,17 @@ function Her2ExpansionVisual({ visual }: { visual: Extract<ProjectVisual, { kind
   const priorityRows = [...visual.rows].sort((a, b) => a.finalRank - b.finalRank);
 
   return (
-    <div className="min-w-[860px] space-y-5">
+    <div className="space-y-5">
       <div className="grid gap-2 rounded-lg border border-border/70 bg-background p-3 text-[0.7rem] leading-5 text-muted-foreground sm:grid-cols-3">
-        <p><span className="font-semibold text-emerald-700">High:</span> near-term expansion hypothesis to pressure-test first.</p>
-        <p><span className="font-semibold text-amber-700">Medium:</span> plausible follow-on; needs differentiation or feasibility support.</p>
-        <p><span className="font-semibold text-rose-700">Low:</span> hold unless asset-specific internal data change the case.</p>
+        <p><span className="font-semibold text-foreground">Scope:</span> non-breast HER2 IHC 3+ expansion; breast is excluded because it is a mature HER2-defined disease area.</p>
+        <p><span className="font-semibold text-foreground">Evidence:</span> response and prevalence come from different public datasets and are not a direct efficacy comparison.</p>
+        <p><span className="font-semibold text-foreground">Decision:</span> high screening yield still needs differentiation, especially where HER2-directed trials or approvals already exist.</p>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
         <RankedBarPanel
           title="1. Response signal rank"
-          message="Highest public ORR signals are endometrial, cervical, and ovarian, but N is small."
+          message="This view shows signal strength only. It does not account for screening yield, competition, or feasibility."
           footnote="DESTINY-PanTumor02 centrally confirmed HER2 IHC 3+ cohorts; ORR shown with cohort N."
         >
           {responseRows.map((row) => (
@@ -189,7 +200,7 @@ function Her2ExpansionVisual({ visual }: { visual: Extract<ProjectVisual, { kind
 
         <RankedBarPanel
           title="2. Screening-yield rank"
-          message="Bladder and uterine serous have the highest public IHC 3+ prevalence; pancreatic has the weakest yield."
+          message="This view shows practical screening yield only. It does not prove the best clinical expansion path."
           footnote="Real-world HER2 IHC dataset; prevalence shown with IHC 3+ count / tested N."
         >
           {prevalenceRows.map((row) => (
@@ -210,10 +221,17 @@ function Her2ExpansionVisual({ visual }: { visual: Extract<ProjectVisual, { kind
         <div className="border-b border-border/70 bg-muted/35 px-4 py-3">
           <p className="text-sm font-semibold text-foreground">3. Evidence-backed prioritization matrix</p>
           <p className="mt-1 text-xs leading-5 text-muted-foreground">
-            Final rank integrates response strength, prevalence/screening yield, and practical differentiation. Scores are 1-5 directional judgments from public data.
+            Final rank integrates response strength, prevalence, screening burden, and differentiation. Scores are 1-5 directional judgments from public data.
           </p>
+          <div className="mt-2 flex flex-wrap gap-2 text-[0.68rem] font-medium text-muted-foreground">
+            <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-emerald-600" />5 strongest</span>
+            <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-emerald-200" />4 supportive</span>
+            <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-amber-200" />3 mixed</span>
+            <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-orange-100" />2 limiting</span>
+            <span className="inline-flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-rose-100" />1 weak</span>
+          </div>
         </div>
-        <div className="grid grid-cols-[1.05fr_0.5fr_0.6fr_0.6fr_0.65fr_0.58fr_0.62fr_1.65fr] gap-2 p-4 text-xs">
+        <div className="hidden grid-cols-[1.05fr_0.5fr_0.6fr_0.6fr_0.65fr_0.58fr_0.62fr_1.65fr] gap-2 p-4 text-xs md:grid">
           {["Segment", "ORR", "Prevalence", "Screening", "Differentiation", "Overall", "Priority", "Evidence behind rank"].map((header) => (
             <p key={header} className="text-[0.62rem] font-semibold uppercase tracking-[0.11em] text-foreground/50">{header}</p>
           ))}
@@ -234,7 +252,32 @@ function Her2ExpansionVisual({ visual }: { visual: Extract<ProjectVisual, { kind
                 <PriorityPill priority={row.priority} />
               </div>
               <div className="space-y-1 border-t border-border/70 py-3 leading-5 text-muted-foreground">
-                <p>{row.rationale}</p>
+                <p className="font-medium text-foreground/80">{row.rationale}</p>
+                <p><span className="font-semibold text-foreground/70">Screening:</span> {row.screeningEvidence}</p>
+                <p><span className="font-semibold text-foreground/70">Differentiation:</span> {row.differentiationEvidence}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="space-y-3 p-4 md:hidden">
+          {priorityRows.map((row) => (
+            <div key={row.tumor} className="rounded-lg border border-border/70 bg-background p-3">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-sm font-semibold text-foreground">#{row.finalRank} {row.tumor}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">{row.screenBurden}</p>
+                </div>
+                <PriorityPill priority={row.priority} />
+              </div>
+              <div className="mt-3 grid grid-cols-2 gap-2">
+                <MobileHeatCell label="ORR" value={row.matrix.response} />
+                <MobileHeatCell label="Prevalence" value={row.matrix.prevalence} />
+                <MobileHeatCell label="Screening" value={row.matrix.screening} />
+                <MobileHeatCell label="Diff." value={row.matrix.differentiation} />
+              </div>
+              <p className="mt-3 text-xs font-semibold text-foreground">Overall {row.finalScore.toFixed(1)}</p>
+              <div className="mt-2 space-y-1 text-xs leading-5 text-muted-foreground">
+                <p className="font-medium text-foreground/80">{row.rationale}</p>
                 <p><span className="font-semibold text-foreground/70">Screening:</span> {row.screeningEvidence}</p>
                 <p><span className="font-semibold text-foreground/70">Differentiation:</span> {row.differentiationEvidence}</p>
               </div>
@@ -243,13 +286,13 @@ function Her2ExpansionVisual({ visual }: { visual: Extract<ProjectVisual, { kind
         </div>
         <div className="border-t border-border/70 px-4 py-3">
           <p className="text-[0.68rem] leading-5 text-muted-foreground">
-            Annotation: response score considers ORR and IHC 3+ cohort N; prevalence and screening scores use real-world IHC 3+ rate and approximate patients screened per positive; differentiation reflects public competitive and histology-specific context, including whether a clear histology-specific question or an existing HER2-directed standard changes the opportunity. Overall score is the average of the four displayed evidence dimensions.
+            Annotation: response score considers ORR and IHC 3+ cohort N; prevalence and screening scores use real-world IHC 3+ rate and approximate patients screened per positive; differentiation reflects public competitive and histology-specific context. Bladder is penalized for active HER2-directed development; biliary tract is penalized for an approved HER2-directed option; breast cancer is outside scope rather than deprioritized. Overall score is the average of the four displayed evidence dimensions.
           </p>
         </div>
       </div>
 
       <ChartNote>
-        Takeaway: prioritize uterine serous/endometrial, bladder/urothelial, and cervical hypotheses for first-pass pressure testing. ORR and prevalence come from separate public datasets, so the matrix is an expansion-screening framework, not an efficacy comparison.
+        Takeaway: uterine serous/endometrial is the cleanest first-pass hypothesis. Bladder remains scientifically visible because screening yield is high, but it needs a sharper differentiation or sequencing rationale. Cervical is interesting but N-limited; ovarian and biliary tract are conditional follow-ons.
       </ChartNote>
     </div>
   );
@@ -304,6 +347,23 @@ function formatPercent(value: number) {
 }
 
 function HeatCell({ value }: { value: number }) {
+  return (
+    <div className="border-t border-border/70 py-3">
+      <HeatCellBadge value={value} />
+    </div>
+  );
+}
+
+function MobileHeatCell({ label, value }: { label: string; value: number }) {
+  return (
+    <div className="flex items-center justify-between rounded-md border border-border/60 bg-muted/25 px-2 py-2">
+      <span className="text-[0.65rem] font-semibold uppercase tracking-[0.1em] text-foreground/50">{label}</span>
+      <HeatCellBadge value={value} />
+    </div>
+  );
+}
+
+function HeatCellBadge({ value }: { value: number }) {
   const tone =
     value >= 5
       ? "bg-emerald-600 text-white"
@@ -316,11 +376,9 @@ function HeatCell({ value }: { value: number }) {
             : "bg-rose-100 text-rose-950";
 
   return (
-    <div className="border-t border-border/70 py-3">
-      <span className={cn("inline-flex h-7 w-9 items-center justify-center rounded-md text-xs font-semibold", tone)}>
-        {value}
-      </span>
-    </div>
+    <span className={cn("inline-flex h-7 w-9 items-center justify-center rounded-md text-xs font-semibold", tone)}>
+      {value}
+    </span>
   );
 }
 
@@ -446,7 +504,7 @@ function BiomarkerReviewVisual({ visual }: { visual: Extract<ProjectVisual, { ki
   );
 }
 
-function MiniBlock({ label, value, tone = "muted" }: { label: string; value: string; tone?: "muted" | "strong" }) {
+export function MiniBlock({ label, value, tone = "muted" }: { label: string; value: string; tone?: "muted" | "strong" }) {
   return (
     <div>
       <p className="text-xs font-semibold uppercase tracking-[0.15em] text-foreground/55">{label}</p>
@@ -455,7 +513,7 @@ function MiniBlock({ label, value, tone = "muted" }: { label: string; value: str
   );
 }
 
-function ListBlock({ label, items }: { label: string; items: string[] }) {
+export function ListBlock({ label, items }: { label: string; items: string[] }) {
   return (
     <div>
       <p className="text-xs font-semibold uppercase tracking-[0.15em] text-foreground/55">{label}</p>
@@ -547,7 +605,7 @@ function ConfidencePill({ confidence }: { confidence: Tier }) {
   );
 }
 
-function ProjectTable({ columns, rows }: { columns: string[]; rows: string[][] }) {
+export function ProjectTable({ columns, rows }: { columns: string[]; rows: string[][] }) {
   return (
     <div className="overflow-hidden rounded-xl border border-border/80 bg-background">
       <div className="overflow-x-auto">
@@ -582,7 +640,7 @@ function isTier(value: string): value is Tier {
   return value === "High" || value === "Medium" || value === "Low";
 }
 
-function ReferenceList({ references }: { references: { label: string; href: string }[] }) {
+export function ReferenceList({ references }: { references: { label: string; href: string }[] }) {
   return (
     <div>
       <p className="text-xs font-semibold uppercase tracking-[0.15em] text-foreground/55">References</p>
