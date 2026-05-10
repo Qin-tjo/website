@@ -10,7 +10,7 @@ export const siteConfig = {
   shortName: "Qin Tjokrosurjo",
   role: "Independent oncology biomarker strategy consultant",
   email: "qinyu5155@gmail.com",
-  calendlyUrl: "", // TODO: Optional. Add later if you want, but the site keeps email primary.
+  calendlyUrl: "",
   headshot: {
     src: `${basePath}/qin-headshot.jpg`,
     alt: "Qin Tjokrosurjo, PhD",
@@ -18,9 +18,9 @@ export const siteConfig = {
   },
   socials: {
     linkedin: "https://www.linkedin.com/in/qin-tjokrosurjo-527383138/",
-    googleScholar: "", // TODO: Optional.
-    researchGate: "", // TODO: Optional.
-    x: "", // TODO: Optional.
+    googleScholar: "",
+    researchGate: "",
+    x: "",
   },
   seo: {
     title: "Qin Tjokrosurjo, PhD | Oncology Biomarker Strategy Consultant",
