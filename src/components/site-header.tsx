@@ -37,7 +37,7 @@ export function SiteHeader() {
           ))}
         </nav>
         <Button asChild size="sm">
-          <a href={`mailto:${siteConfig.email}`}>Project inquiry</a>
+          <a href={`mailto:${siteConfig.email}`}>Email me</a>
         </Button>
       </div>
     </header>

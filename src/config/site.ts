@@ -31,7 +31,7 @@ export const siteConfig = {
       "Scientific consulting for oncology biotechs making target, indication, biomarker, and translational development decisions.",
   },
   cta: {
-    primary: "Start a project inquiry",
+    primary: "Email me",
   },
   hero: {
     eyebrow: "Independent scientific consulting for targeted oncology teams",
